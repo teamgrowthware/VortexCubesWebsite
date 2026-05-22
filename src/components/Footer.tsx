@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span className="text-xl font-bold tracking-tighter text-white">VORTEX CUBES</span>
+                  <img src="/Neonspark_files/company-logo.png" alt="Vortex Cubes" style={{ height: '3rem' }} className="w-auto" />
                 </motion.a>
                 <p className="text-text-light mt-6 mb-8">
                   Your trusted partner for comprehensive IT solutions and product development. We build custom software that drives business growth.

@@ -99,7 +99,7 @@ const Header: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-2xl font-bold tracking-tighter text-white">VORTEX CUBES</span>
+              <img src="/Neonspark_files/company-logo.png" alt="Vortex Cubes" style={{ height: '3rem' }} className="w-auto" />
             </motion.a>
           </motion.div>
           
