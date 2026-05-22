@@ -18,12 +18,12 @@ const Footer: React.FC = () => {
   ];
 
   const services = [
-    { label: 'Web Development', url: '/services/web-development' },
-    { label: 'App Development', url: '/services/app-development' },
-    { label: 'ERP Solutions', url: '/services/erp' },
-    { label: 'CRM Solutions', url: '/services/crm' },
-    { label: 'AI & Automation', url: '/services/ai' },
-    { label: 'Cloud & Security', url: '/services/security' }
+    { label: 'Web Development', url: '/services' },
+    { label: 'App Development', url: '/services' },
+    { label: 'ERP Solutions', url: '/services' },
+    { label: 'CRM Solutions', url: '/services' },
+    { label: 'AI & Automation', url: '/services' },
+    { label: 'Cloud & Security', url: '/services' }
   ];
 
   return (

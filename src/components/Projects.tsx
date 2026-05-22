@@ -2,78 +2,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { staggerContainerVariants } from '../animations/motionVariants';
 import { useInView } from '../animations/hooks';
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    title: 'VortexCart',
-    description: 'AI-powered ecommerce platform with smart recommendations and neural search.',
-    image: '/Neonspark_files/vortexCart.png',
-    tags: ['Ecommerce', 'AI', 'Node.js'],
-  },
-  {
-    id: 2,
-    title: 'Lumina Marketplace',
-    description: 'High-scale multi-vendor platform for luxury sustainable goods.',
-    image: '/Neonspark_files/LuminaMarketplace.png',
-    tags: ['Ecommerce', 'React', 'AWS'],
-  },
-  {
-    id: 3,
-    title: 'Zenith D2C',
-    description: 'Premium direct-to-consumer store for high-end lifestyle electronics.',
-    image: '/Neonspark_files/ZenithD2C.png',
-    tags: ['Ecommerce', 'Next.js', 'Stripe'],
-  },
-  {
-    id: 4,
-    title: 'Samriddhi',
-    description: 'Agricultural product registration and online inventory management.',
-    image: '/Neonspark_files/Samriddhi.png',
-    tags: ['Agro Tech', 'Python', 'PostgreSQL'],
-  },
-  {
-    id: 5,
-    title: 'Chartmind',
-    description: 'AI-powered analytics and data visualization for financial markets.',
-    image: '/Neonspark_files/chartmindai.png',
-    tags: ['AI / Analytics', 'D3.js', 'FinTech'],
-  },
-  {
-    id: 6,
-    title: 'ConsultAdmin',
-    description: 'Comprehensive administrative platform for business management.',
-    image: '/Neonspark_files/consultAdmin.png',
-    tags: ['SaaS / Enterprise', 'TypeScript', 'Dashboard'],
-  },
-  {
-    id: 7,
-    title: 'Night Club',
-    description: 'Premium nightlife booking and event management platform.',
-    image: '/Neonspark_files/nightclub.png',
-    tags: ['Media / Creative Tech', 'Booking', 'Real-time'],
-  },
-  {
-    id: 8,
-    title: 'Velocity',
-    description: 'Complete corporate training center website with Student Portal.',
-    image: '/Neonspark_files/velocity.png',
-    tags: ['EdTech', 'LMS', 'React'],
-  },
-];
+import { projects, type Project } from '../data/projects';
+import { useProjectModal } from '../contexts/ProjectModalContext';
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const { openModal } = useProjectModal();
+
   return (
     <motion.div
       className="card gradient-border bg-dark overflow-hidden flex flex-col"
+      style={{ cursor: 'pointer' }}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
@@ -82,6 +20,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         y: -8,
         boxShadow: '0 16px 40px rgba(59, 130, 246, 0.35)',
       }}
+      onClick={() => openModal(project)}
     >
       {/* Card Header */}
       <div className="px-5 pt-5 pb-3">

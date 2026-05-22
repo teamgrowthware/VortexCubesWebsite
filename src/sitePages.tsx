@@ -10,6 +10,8 @@ import FAQSection from './components/FAQSection';
 import Newsletter from './components/Newsletter';
 import ContactCTA from './components/ContactCTA';
 import Blog from './components/Blog';
+import { projects, type Project } from './data/projects';
+import { useProjectModal } from './contexts/ProjectModalContext';
 
 type LinkItem = {
   label: string;
@@ -71,57 +73,6 @@ const serviceCards = [
     title: 'Cloud, DevOps & Data-Driven Insights',
     description: 'Setup secure cloud infrastructure, CI/CD pipelines, analytics tracking and performance reporting systems.',
     href: '/services/devops',
-  },
-];
-
-const projectCards = [
-  {
-    title: 'VortexCart',
-    description: 'AI-powered ecommerce platform with smart recommendations and neural search.',
-    image: '/Neonspark_files/vortexCart.png',
-    tags: ['Ecommerce', 'AI', 'Node.js'],
-  },
-  {
-    title: 'Lumina Marketplace',
-    description: 'High-scale multi-vendor platform for luxury sustainable goods.',
-    image: '/Neonspark_files/LuminaMarketplace.png',
-    tags: ['Ecommerce', 'React', 'AWS'],
-  },
-  {
-    title: 'Zenith D2C',
-    description: 'Premium direct-to-consumer store for high-end lifestyle electronics.',
-    image: '/Neonspark_files/ZenithD2C.png',
-    tags: ['Ecommerce', 'Next.js', 'Stripe'],
-  },
-  {
-    title: 'Samriddhi',
-    description: 'Agricultural product registration and online inventory management.',
-    image: '/Neonspark_files/Samriddhi.png',
-    tags: ['Agro Tech', 'Python', 'PostgreSQL'],
-  },
-  {
-    title: 'Chartmind',
-    description: 'AI-powered analytics and data visualization for financial markets.',
-    image: '/Neonspark_files/chartmindai.png',
-    tags: ['AI / Analytics', 'D3.js', 'FinTech'],
-  },
-  {
-    title: 'ConsultAdmin',
-    description: 'Comprehensive administrative platform for business management.',
-    image: '/Neonspark_files/consultAdmin.png',
-    tags: ['SaaS / Enterprise', 'TypeScript', 'Dashboard'],
-  },
-  {
-    title: 'Night Club',
-    description: 'Premium nightlife booking and event management platform.',
-    image: '/Neonspark_files/nightclub.png',
-    tags: ['Media / Creative Tech', 'Booking', 'Real-time'],
-  },
-  {
-    title: 'Velocity',
-    description: 'Complete corporate training center website with Student Portal.',
-    image: '/Neonspark_files/velocity.png',
-    tags: ['EdTech', 'LMS', 'React'],
   },
 ];
 
@@ -579,15 +530,17 @@ function FeatureGrid({
 function PortfolioCarouselGrid({
   items,
 }: {
-  items: { title: string; description: string; image: string; tags?: string[] }[];
+  items: Project[];
 }) {
-  function Card({
-    item,
-  }: {
-    item: { title: string; description: string; image: string; tags?: string[] };
-  }) {
+  const { openModal } = useProjectModal();
+
+  function Card({ item }: { item: Project }) {
     return (
-      <div className="card gradient-border bg-dark overflow-hidden flex flex-col">
+      <div
+        className="card gradient-border bg-dark overflow-hidden flex flex-col"
+        style={{ cursor: 'pointer' }}
+        onClick={() => openModal(item)}
+      >
         <div className="px-5 pt-5 pb-3">
           <h3 className="text-base font-semibold gradient-text mb-1">{item.title}</h3>
           <p className="text-sm text-text-light leading-snug">{item.description}</p>
@@ -1072,7 +1025,7 @@ function PortfolioPage() {
             title="Selected work and outcomes"
             description="A few examples of how we approach design, development, and product experience."
           />
-          <PortfolioCarouselGrid items={projectCards} />
+          <PortfolioCarouselGrid items={projects} />
         </div>
       </section>
     </>
