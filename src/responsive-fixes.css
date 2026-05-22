@@ -1069,40 +1069,6 @@ main {
   padding: clamp(0.5rem, 1vw, 0.75rem) 0;
 }
 
-/* Mobile menu responsive fixes */
-@media (max-width: 1023px) {
-  .navbar-nav {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 80%;
-    max-width: 400px;
-    height: 100vh;
-    background: rgba(10, 10, 10, 0.98);
-    backdrop-filter: blur(20px);
-    flex-direction: column;
-    padding: 5rem 2rem 2rem;
-    gap: 2rem;
-    transition: left 0.3s ease;
-    z-index: 40;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .navbar-nav.flex {
-    left: 0;
-  }
-
-  .navbar-nav .nav-link {
-    font-size: 1.125rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .navbar-nav .nav-link:last-child {
-    border-bottom: none;
-  }
-}
-
 /* Image responsive fixes */
 img {
   max-width: 100%;

@@ -5,6 +5,7 @@ import './Header.css';
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLLIElement>(null);
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
 
@@ -18,11 +19,17 @@ const Header: React.FC = () => {
   const toggleMenu = () => {
     setIsMenuOpen((current) => !current);
     if (isDropdownOpen) setIsDropdownOpen(false);
+    if (isMobileDropdownOpen) setIsMobileDropdownOpen(false);
   };
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDropdownOpen((current) => !current);
+  };
+
+  const toggleMobileDropdown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsMobileDropdownOpen((current) => !current);
   };
 
   // Close dropdown when clicking outside
@@ -35,6 +42,19 @@ const Header: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Body scroll lock when mobile menu is open
+  useEffect(() => {
+    const originalStyle = document.body.style.overflow;
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = originalStyle || '';
+    }
+    return () => {
+      document.body.style.overflow = originalStyle || '';
+    };
+  }, [isMenuOpen]);
 
   // Animation variants
   const navItemVariants: Variants = {
@@ -62,10 +82,50 @@ const Header: React.FC = () => {
     }
   };
 
-  const mobileMenuVariants: Variants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
+  const backdropVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { duration: 0.3, ease: "easeOut" }
+    },
+    exit: { 
+      opacity: 0,
+      transition: { duration: 0.2, ease: "easeIn" }
+    }
+  };
+
+  const drawerVariants: Variants = {
+    hidden: { x: '100%' },
+    visible: { 
+      x: 0,
+      transition: { type: "spring", damping: 25, stiffness: 200 }
+    },
+    exit: { 
+      x: '100%',
+      transition: { type: "spring", damping: 25, stiffness: 200 }
+    }
+  };
+
+  const mobileNavItemVariants: Variants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: { delay: i * 0.06, duration: 0.3, ease: "easeOut" }
+    })
+  };
+
+  const mobileDropdownVariants: Variants = {
+    hidden: { 
+      height: 0,
+      opacity: 0,
+      transition: { duration: 0.25, ease: "easeInOut" }
+    },
+    visible: { 
+      height: 'auto',
+      opacity: 1,
+      transition: { duration: 0.3, ease: "easeInOut" }
+    }
   };
 
   const mainLinks = [
@@ -105,7 +165,7 @@ const Header: React.FC = () => {
           
           {/* Navigation in center */}
           <motion.div 
-            className="hidden lg:flex items-center flex-1 justify-center"
+            className="desktop-nav-wrapper hidden lg:flex items-center flex-1 justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -186,7 +246,7 @@ const Header: React.FC = () => {
           
           {/* Action buttons on right */}
           <motion.div 
-            className="hidden lg:flex items-center gap-4"
+            className="desktop-contact-wrapper hidden lg:flex items-center gap-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -203,7 +263,7 @@ const Header: React.FC = () => {
           
           {/* Mobile menu toggle */}
           <motion.button 
-            className="lg:hidden flex flex-col gap-1 w-6 h-6 justify-center items-center"
+            className="hamburger-toggle lg:hidden flex flex-col gap-1 w-6 h-6 justify-center items-center z-50"
             onClick={toggleMenu}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -223,36 +283,131 @@ const Header: React.FC = () => {
           </motion.button>
         </div>
         
-        {/* Mobile menu with Slide Down Animation */}
+        {/* Right-Side Drawer with Backdrop */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              className="lg:hidden absolute top-full left-0 right-0 bg-dark border-t border-gray-800"
-              variants={mobileMenuVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-            >
-              <ul className="flex flex-col p-4 overflow-y-auto max-h-[80vh]">
-                {[...mainLinks, ...extraLinks, { href: '/contact', label: 'CONTACT US' }].map((item, i) => (
-                  <motion.li 
-                    key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
+            <>
+              {/* Backdrop Overlay */}
+              <motion.div
+                className="mobile-backdrop"
+                variants={backdropVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={toggleMenu}
+              />
+              
+              {/* Right Drawer */}
+              <motion.div
+                className="mobile-drawer"
+                variants={drawerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {/* Drawer Header Spacer */}
+                <div className="mobile-drawer-header" />
+                
+                {/* Nav Items */}
+                <ul className="mobile-nav-list">
+                  {mainLinks.map((item, i) => (
+                    <motion.li 
+                      key={item.href}
+                      custom={i}
+                      variants={mobileNavItemVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <motion.a 
+                        href={item.href} 
+                        className={`mobile-nav-link${isActive(item.href) ? ' active' : ''}`}
+                        whileHover={{ x: 8, color: '#3B82F6' }}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.label}
+                      </motion.a>
+                    </motion.li>
+                  ))}
+                  
+                  {/* Mobile PAGES Dropdown / Accordion */}
+                  <motion.li
+                    custom={mainLinks.length}
+                    variants={mobileNavItemVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <button 
+                      onClick={toggleMobileDropdown}
+                      className="mobile-nav-link mobile-dropdown-toggle"
+                    >
+                      <span>PAGES</span>
+                      <motion.svg 
+                        width="12" 
+                        height="12" 
+                        viewBox="0 0 10 6" 
+                        fill="none"
+                        animate={{ rotate: isMobileDropdownOpen ? 180 : 0 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </motion.svg>
+                    </button>
+                    
+                    <AnimatePresence>
+                      {isMobileDropdownOpen && (
+                        <motion.div
+                          className="mobile-dropdown-content"
+                          variants={mobileDropdownVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                        >
+                          <ul className="mobile-dropdown-list">
+                            {extraLinks.map((link, i) => (
+                              <motion.li 
+                                key={link.href}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                              >
+                                <a 
+                                  href={link.href} 
+                                  className={`mobile-dropdown-item${isActive(link.href) ? ' active' : ''}`}
+                                  onClick={() => {
+                                    setIsMenuOpen(false);
+                                    setIsMobileDropdownOpen(false);
+                                  }}
+                                >
+                                  {link.label}
+                                </a>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.li>
+                  
+                  {/* Contact Us - as last item */}
+                  <motion.li
+                    custom={mainLinks.length + 1}
+                    variants={mobileNavItemVariants}
+                    initial="hidden"
+                    animate="visible"
                   >
                     <motion.a 
-                      href={item.href} 
-                      className={`nav-link block py-2${isActive(item.href) ? ' active' : ''}`}
-                      whileHover={{ x: 5, color: '#3B82F6' }}
+                      href="/contact" 
+                      className="mobile-contact-btn"
+                      whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {item.label}
+                      CONTACT US
                     </motion.a>
                   </motion.li>
-                ))}
-              </ul>
-            </motion.div>
+                </ul>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>
