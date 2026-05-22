@@ -1,0 +1,162 @@
+.page-content {
+  isolation: isolate;
+}
+
+.page-content > section {
+  animation: section-rise 900ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.page-content .card {
+  animation: card-rise 760ms cubic-bezier(.16, 1, .3, 1) both;
+  will-change: transform, opacity;
+}
+
+.page-content .badge,
+.page-content h1,
+.page-content h2,
+.page-content h3,
+.page-content p {
+  animation: text-fade 700ms ease both;
+}
+
+.page-content .card,
+.page-content .contact-btn,
+.page-content .btn,
+.page-content .nav-link,
+.page-content .navbar-brand img {
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.page-content .card:hover {
+  transform: translateY(-6px);
+}
+
+.page-content .btn:hover,
+.page-content .contact-btn:hover,
+.page-content .nav-link:hover,
+.page-content .navbar-brand:hover img {
+  transform: translateY(-1px);
+}
+
+.page-content img {
+  transition: transform 320ms ease, filter 320ms ease, opacity 320ms ease;
+}
+
+.page-content .card:hover img {
+  transform: scale(1.02);
+}
+
+.hero-sheen {
+  position: relative;
+}
+
+.hero-sheen::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -20%;
+  height: 30rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0) 68%);
+  pointer-events: none;
+  animation: float-glow 10s ease-in-out infinite;
+}
+
+.motion-fade,
+.motion-rise,
+.motion-pop {
+  animation-fill-mode: both;
+}
+
+.motion-fade {
+  animation: text-fade 760ms ease both;
+}
+
+.motion-rise {
+  animation: section-rise 860ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.motion-pop {
+  animation: pop-scale 700ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.motion-delay-2 {
+  animation-delay: 120ms;
+}
+
+@keyframes section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes text-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float-glow {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-content > section,
+  .page-content .card,
+  .page-content .badge,
+  .page-content h1,
+  .page-content h2,
+  .page-content h3,
+  .page-content p,
+  .motion-fade,
+  .motion-rise,
+  .motion-pop,
+  .hero-sheen::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
