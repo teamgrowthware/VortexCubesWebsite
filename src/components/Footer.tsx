@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
                   Your trusted partner for comprehensive IT solutions and product development. We build custom software that drives business growth.
                 </p>
                 <div className="social-icons">
-                  <ul className="flex gap-4">
+                  <ul className="flex gap-4 justify-center sm:justify-start">
                     {socialLinks.map((link, i) => (
                       <motion.li
                         key={link.label}
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
                 <ul className="space-y-4">
                   {services.map((service, i) => (
                     <motion.li
-                      key={service.url}
+                      key={service.label}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}

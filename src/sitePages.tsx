@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import Projects from './components/Projects';
@@ -12,6 +12,7 @@ import ContactCTA from './components/ContactCTA';
 import Blog from './components/Blog';
 import { projects, type Project } from './data/projects';
 import { useProjectModal } from './contexts/ProjectModalContext';
+import { sendContactEmail } from './services/email';
 
 type LinkItem = {
   label: string;
@@ -1171,6 +1172,36 @@ function CareerPage() {
 function ContactPage() {
   usePageTitle('Contact | Vortex Cubes');
 
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMsg('');
+
+    const form = new FormData(e.currentTarget);
+    const budget = form.get('budget') as string;
+    const message = form.get('message') as string;
+    const params = {
+      from_name: form.get('from_name') as string,
+      from_email: form.get('from_email') as string,
+      message: budget ? `${message}\n\nBudget: ${budget}` : message,
+      to_name: 'Vortex Cubes',
+    };
+
+    try {
+      await sendContactEmail(params);
+      setStatus('success');
+      formRef.current?.reset();
+    } catch (err) {
+      console.error('Email send error:', err);
+      setStatus('error');
+      setErrorMsg('Failed to send message. Please try again later.');
+    }
+  };
+
   return (
     <>
       <PageHero
@@ -1190,14 +1221,20 @@ function ContactPage() {
               <p className="text-text-light mb-8">
                 Share a few details and we'll follow up with a plan that fits your timeline and scope.
               </p>
-              <form className="grid grid-cols-1 gap-4">
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" placeholder="Your Name" />
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="email" placeholder="Your Email" />
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" placeholder="Project Budget" />
-                <textarea className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white min-h-[180px]" placeholder="Tell us about your project" />
-                <button type="button" className="btn btn-primary justify-center">
-                  Request a project
+              <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" name="from_name" placeholder="Your Name" required />
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="email" name="from_email" placeholder="Your Email" required />
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" name="budget" placeholder="Project Budget" />
+                <textarea className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white min-h-[180px]" name="message" placeholder="Tell us about your project" required />
+                <button type="submit" className="btn btn-primary justify-center" disabled={status === 'loading'}>
+                  {status === 'loading' ? 'Sending...' : 'Request a project'}
                 </button>
+                {status === 'success' && (
+                  <p className="text-green-400 text-sm mt-2">Message sent successfully! We'll get back to you soon.</p>
+                )}
+                {status === 'error' && (
+                  <p className="text-red-400 text-sm mt-2">{errorMsg}</p>
+                )}
               </form>
             </div>
             <div className="card gradient-border bg-secondary/50 flex flex-col justify-center items-center text-center">

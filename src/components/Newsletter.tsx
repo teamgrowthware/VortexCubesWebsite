@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { sendNewsletterEmail } from '../services/email';
 
 const Newsletter: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    const form = new FormData(e.currentTarget);
+    const email = form.get('email') as string;
+
+    try {
+      await sendNewsletterEmail(email);
+      setStatus('success');
+      formRef.current?.reset();
+    } catch {
+      setStatus('error');
+    }
+  };
+
   return (
     <section className="section bg-dark relative overflow-hidden">
-      {/* Decorative background element */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-1"></div>
 
       <div className="container">
@@ -26,24 +45,39 @@ const Newsletter: React.FC = () => {
             </p>
 
             <form
-              className="flex flex-row gap-3 w-full max-w-sm mx-auto justify-center items-center mt-4 mb-10"
-              onSubmit={(e) => e.preventDefault()}
+              ref={formRef}
+              onSubmit={handleSubmit}
+              className="mt-4 mb-10"
             >
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 min-w-0 px-8 h-12 rounded-full border border-gray-800 text-white focus:outline-none focus:border-primary transition-all placeholder:text-gray-500 bg-dark/80 text-sm"
-                required
-              />
-              <motion.button
-                type="submit"
-                className="px-8 h-10 rounded-full bg-primary text-black font-bold uppercase tracking-tight whitespace-nowrap transition-all shadow-lg hover:shadow-primary/20 flex-none text-sm"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <div
+                className="flex flex-col sm:flex-row gap-3 items-center justify-center w-full mx-auto"
+                style={{ maxWidth: '400px' }}
               >
-                Subscribe
-              </motion.button>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  className="w-full px-8 h-12 rounded-full border border-gray-800 text-white focus:outline-none focus:border-primary transition-all placeholder:text-gray-500 bg-dark/80 text-sm"
+                  required
+                />
+                <motion.button
+                  type="submit"
+                  className="px-8 h-10 rounded-full bg-primary text-black font-bold uppercase tracking-tight whitespace-nowrap transition-all shadow-lg hover:shadow-primary/20 flex-none text-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={status === 'loading'}
+                >
+                  {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+                </motion.button>
+              </div>
             </form>
+
+            {status === 'success' && (
+              <p className="text-green-400 text-sm mt-0 mb-6">Subscribed successfully!</p>
+            )}
+            {status === 'error' && (
+              <p className="text-red-400 text-sm mt-0 mb-6">Subscription failed. Please try again.</p>
+            )}
 
             <p className="text-xs text-text-light mt-8 opacity-60">
               We respect your privacy. Unsubscribe at any time.

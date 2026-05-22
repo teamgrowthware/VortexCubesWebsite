@@ -1152,6 +1152,9 @@ img {
 
 /* Responsive typography */
 @media (max-width: 640px) {
+  :root {
+    --header-offset: 80px;
+  }
   html {
     font-size: 14px;
   }
