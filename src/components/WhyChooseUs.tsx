@@ -48,7 +48,7 @@ const WhyChooseUs: React.FC = () => {
   ];
 
   return (
-    <section className="section flex flex-col justify-center items-center text-center gap-y-4 mb-14 bg-dark">
+    <section className="section flex flex-col justify-center items-center text-center gap-y-4 bg-dark">
       <div className="container">
         {/* Header Section */}
         <motion.div
