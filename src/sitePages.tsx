@@ -4,6 +4,7 @@ import Services from './components/Services';
 import Projects from './components/Projects';
 import WhyChooseUs from './components/WhyChooseUs';
 import Sectors from './components/Sectors';
+import Technologies from './components/Technologies';
 import GlobalNet from './components/GlobalNet';
 import Testimonials from './components/Testimonials';
 import FAQSection from './components/FAQSection';
@@ -635,6 +636,7 @@ function HomePage() {
       <Hero />
       <WhyChooseUs />
       <Sectors />
+      <Technologies />
       <Services />
       <GlobalNet />
       <Testimonials />

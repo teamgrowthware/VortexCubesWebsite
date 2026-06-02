@@ -22,10 +22,6 @@ const Header: React.FC = () => {
     if (isMobileDropdownOpen) setIsMobileDropdownOpen(false);
   };
 
-  const toggleDropdown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDropdownOpen((current) => !current);
-  };
 
   const toggleMobileDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -66,21 +62,6 @@ const Header: React.FC = () => {
     })
   };
 
-  const dropdownVariants: Variants = {
-    hidden: { opacity: 0, y: 10, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      transition: { duration: 0.2, ease: "easeOut" }
-    },
-    exit: { 
-      opacity: 0, 
-      y: 10, 
-      scale: 0.95,
-      transition: { duration: 0.15, ease: "easeIn" }
-    }
-  };
 
   const backdropVariants: Variants = {
     hidden: { opacity: 0 },
