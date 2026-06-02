@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  staggerContainerVariants, 
+import {
+  staggerContainerVariants,
   staggerAlternateSlideVariants
 } from '../animations/motionVariants';
 import { useInView } from '../animations/hooks';
@@ -65,14 +65,14 @@ const Services: React.FC = () => {
     <section className="section bg-dark">
       <div className="container">
         {/* Header Section */}
-        <motion.div 
+        <motion.div
           className="flex flex-col justify-center items-center text-center gap-y-4 mb-14"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <motion.div 
+          <motion.div
             className="badge"
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
@@ -81,7 +81,7 @@ const Services: React.FC = () => {
           >
             Services
           </motion.div>
-          <motion.h2 
+          <motion.h2
             className="text-h2 font-bold"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -90,7 +90,7 @@ const Services: React.FC = () => {
           >
             Comprehensive Digital Services — From Development to Growth
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-lg text-text-light max-w-4xl"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -100,45 +100,45 @@ const Services: React.FC = () => {
             We build scalable technology systems and growth-driven marketing strategies to help businesses scale smarter.
           </motion.p>
         </motion.div>
-        
-         {/* Services Grid with Staggered Animation */}
-         <motion.div 
-           ref={containerRef}
-           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-           variants={staggerContainerVariants}
-           initial="hidden"
-           animate={isInView ? "visible" : "hidden"}
-           viewport={{ once: true }}
-         >
-           {services.map((service, index) => (
-             <motion.div 
-               key={service.id} 
-               className="card gradient-border bg-dark"
-               variants={staggerAlternateSlideVariants}
-               custom={index}
-               whileHover={{ 
-                 y: -10,
-                 boxShadow: '0 20px 40px rgba(59, 130, 246, 0.3)',
-               }}
-               transition={{ duration: 0.3 }}
-             >
-                <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-6 sm:pb-8 relative">
-                   {/* Animated Border SVG */}
-                   <svg className="absolute top-0 left-0 w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                     <path 
-                       className="animate-svg-path"
-                       d="M0,0 L100,0 L100,100 L0,100 Z"
-                     />
-                   </svg>
+
+        {/* Services Grid with Staggered Animation */}
+        <motion.div
+          ref={containerRef}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          variants={staggerContainerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          viewport={{ once: true }}
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              className="card gradient-border bg-dark"
+              variants={staggerAlternateSlideVariants}
+              custom={index}
+              whileHover={{
+                y: -10,
+                boxShadow: '0 20px 40px rgba(59, 130, 246, 0.3)',
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-6 sm:pb-8 relative">
+                {/* Animated Border SVG */}
+                <svg className="absolute top-0 left-0 w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                  <path
+                    className="animate-svg-path"
+                    d="M0,0 L100,0 L100,100 L0,100 Z"
+                  />
+                </svg>
                 {/* Icon with Rotation Animation */}
-                <motion.div 
+                <motion.div
                   className="flex gap-4 items-center flex-wrap mb-6"
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <motion.div 
+                  <motion.div
                     className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
@@ -148,9 +148,9 @@ const Services: React.FC = () => {
                     </svg>
                   </motion.div>
                 </motion.div>
-                
+
                 {/* Title with Gradient Text */}
-                <motion.h3 
+                <motion.h3
                   className="text-h4 font-medium mb-6 gradient-text"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -159,9 +159,9 @@ const Services: React.FC = () => {
                 >
                   {service.title}
                 </motion.h3>
-                
+
                 {/* Description */}
-                <motion.p 
+                <motion.p
                   className="text-lg text-text-light mb-8"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -170,34 +170,34 @@ const Services: React.FC = () => {
                 >
                   {service.description}
                 </motion.p>
-                
+
                 {/* CTA Link with Hover Animation */}
-                <motion.a 
-                  href={service.link}
+                <motion.a
+                  href={"/portfolio"}
                   className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
                   whileHover={{ x: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Learn More
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Learn More */}
+                  {/* <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
+                  </svg> */}
                 </motion.a>
               </div>
             </motion.div>
           ))}
         </motion.div>
-        
+
         {/* View All Button */}
-        <motion.div 
+        <motion.div
           className="text-center mt-12"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
         >
-          <motion.a 
-            href="/services" 
+          <motion.a
+            href="/services"
             className="btn btn-primary"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

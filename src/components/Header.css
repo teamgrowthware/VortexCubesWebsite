@@ -105,11 +105,7 @@
   transition: all 0.2s ease;
 }
 
-@media (min-width: 1024px) {
-  .hamburger-toggle {
-    display: none !important;
-  }
-}
+/* Hamburger toggle is now visible on all sizes as requested */
 
 /* Desktop nav: hidden on mobile (<1024px), visible on desktop */
 .desktop-nav-wrapper,
@@ -388,9 +384,4 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .mobile-backdrop,
-  .mobile-drawer {
-    display: none !important;
-  }
-}
+/* Mobile drawer is now used for extra pages on desktop too */

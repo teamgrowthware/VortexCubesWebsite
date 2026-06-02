@@ -36,34 +36,39 @@ type ServiceDetail = {
 
 const serviceCards = [
   {
-    title: 'Web & SaaS Product Development',
-    description: 'Build custom scalable web applications, SaaS platforms, admin dashboards and business systems optimized for performance.',
-    href: '/services/web-design',
+    title: 'Website & Application Development',
+    description: 'Build custom scalable web applications, business systems and platforms optimized for top-tier performance and user engagement.',
+    href: '/portfolio',
   },
   {
-    title: 'Digital Growth & Marketing Strategy',
-    description: 'Craft holistic digital plans including SEO, paid ads, funnels and audience targeting to boost visibility and conversions.',
-    href: '/services/marketing',
+    title: 'SaaS & ERP Development',
+    description: 'Develop robust SaaS platforms and comprehensive ERP solutions tailored to streamline operations and drive enterprise growth.',
+    href: '/portfolio',
   },
   {
-    title: 'Performance Websites & Conversion Design',
-    description: 'High-speed responsive websites and landing pages focused on engagement and conversion optimization.',
-    href: '/services/web-design',
+    title: 'AI Automation & Integration',
+    description: 'Integrate intelligent automation workflows, AI features, and APIs to enhance productivity, efficiency, and business intelligence.',
+    href: '/portfolio',
   },
   {
-    title: 'Automation, AI & Smart Integrations',
-    description: 'Integrate automation workflows, AI features, APIs and smart tools to enhance productivity and intelligence.',
-    href: '/services/automation',
+    title: 'Performance Marketing & Social Media Management',
+    description: 'Drive visibility and conversions with ROI-focused marketing strategies, paid campaigns, and engaging social media management.',
+    href: '/portfolio',
   },
   {
-    title: 'Social Media & Paid Campaign Management',
-    description: 'Manage brand growth, social media content, Meta & Google ads and ROI-focused performance campaigns.',
-    href: '/services/marketing',
+    title: 'UI/UX & Graphic Designing',
+    description: 'Craft stunning, user-centric interfaces and captivating brand visuals that leave a lasting impression and improve user experience.',
+    href: '/portfolio',
   },
   {
-    title: 'Cloud, DevOps & Data-Driven Insights',
-    description: 'Setup secure cloud infrastructure, CI/CD pipelines, analytics tracking and performance reporting systems.',
-    href: '/services/devops',
+    title: 'CI/CD & DevOps Services',
+    description: 'Set up secure, automated cloud infrastructure, CI/CD pipelines, and robust deployment systems to accelerate software delivery.',
+    href: '/portfolio',
+  },
+  {
+    title: 'Staff Augmentation',
+    description: 'Scale your team with top-tier tech talent and dedicated professionals tailored to meet your project\'s specific needs and deadlines.',
+    href: '/portfolio',
   },
 ];
 
@@ -877,7 +882,7 @@ function ServicesPage() {
                     {/* Bottom Right Button */}
                     <div className="mt-auto flex justify-end pt-6">
                       <a
-                        href="/portfolio"
+                        href={service.href}
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 transition-all duration-300 text-sm font-medium text-white group"
                       >
                         Learn More
