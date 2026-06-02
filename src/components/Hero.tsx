@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
   const { ref: parallaxRef, yOffset } = useParallaxStrength(0.5);
 
   return (
-    <section className="hero bg-dark relative z-10 h-screen flex items-center justify-center overflow-hidden">
+    <section className="hero bg-dark relative z-10 min-h-screen flex items-center justify-center overflow-hidden py-24">
       {/* Parallax Background */}
       <motion.div
         ref={parallaxRef}
@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
         </svg>
       </motion.div>
 
-      <div className="container">
+      <div className="container relative z-10">
         <motion.div
           className="flex flex-col justify-center items-center text-center overflow-visible"
           variants={containerVariants}
@@ -148,7 +148,7 @@ const Hero: React.FC = () => {
                 whileInView={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.6 }}
               >
-                500+
+                75+
               </motion.div>
               <div className="text-sm text-white mr-4">Projects Completed</div>
             </motion.div>

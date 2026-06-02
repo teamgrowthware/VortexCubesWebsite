@@ -9,7 +9,6 @@ import Testimonials from './components/Testimonials';
 import FAQSection from './components/FAQSection';
 import Newsletter from './components/Newsletter';
 import ContactCTA from './components/ContactCTA';
-import Blog from './components/Blog';
 import { projects, type Project } from './data/projects';
 import { useProjectModal } from './contexts/ProjectModalContext';
 import { sendContactEmail } from './services/email';
@@ -33,15 +32,6 @@ type ServiceDetail = {
   process: DetailSection[];
   deliverables: string[];
   cta: string;
-};
-
-type BlogPost = {
-  title: string;
-  badge: string;
-  date: string;
-  category: string;
-  summary: string;
-  sections: DetailSection[];
 };
 
 const serviceCards = [
@@ -74,41 +64,6 @@ const serviceCards = [
     title: 'Cloud, DevOps & Data-Driven Insights',
     description: 'Setup secure cloud infrastructure, CI/CD pipelines, analytics tracking and performance reporting systems.',
     href: '/services/devops',
-  },
-];
-
-const blogCards = [
-  {
-    title: 'AI in the Modern Workplace: A Guide for Businesses',
-    excerpt: 'Explore how artificial intelligence is transforming business operations and creating new opportunities for growth.',
-    image: '/Neonspark_files/post-1.jpg',
-    date: '04 Apr, 2025',
-    category: 'Artificial Intelligence',
-    href: '/blog/post-1',
-  },
-  {
-    title: 'The Future of Remote Work: Building High-Performance Distributed Teams',
-    excerpt: 'Discover strategies for creating successful remote teams and maintaining productivity in a distributed environment.',
-    image: '/Neonspark_files/post-2.jpg',
-    date: '28 Mar, 2025',
-    category: 'Remote Work',
-    href: '/blog/post-2',
-  },
-  {
-    title: 'Cybersecurity in 2025: Protecting Your Business from Evolving Threats',
-    excerpt: 'Essential cybersecurity strategies and best practices to safeguard your business in an increasingly connected world.',
-    image: '/Neonspark_files/post-3.jpg',
-    date: '15 Mar, 2025',
-    category: 'Artificial Intelligence',
-    href: '/blog/post-3',
-  },
-  {
-    title: 'Digital Transformation Roadmap: A Step-by-Step Guide for Modern Businesses',
-    excerpt: 'Navigate your digital transformation journey with practical strategies and proven frameworks.',
-    image: '/Neonspark_files/post-4.jpg',
-    date: '01 Mar, 2025',
-    category: 'Digital Transformation',
-    href: '/blog/post-4',
   },
 ];
 
@@ -280,57 +235,6 @@ const serviceDetails: Record<string, ServiceDetail> = {
     ],
     deliverables: ['Responsive website', 'Component-based structure', 'Launch-ready pages', 'Style guide support'],
     cta: 'Want a site that feels custom instead of generic? Let’s build it.',
-  },
-};
-
-const blogPosts: Record<string, BlogPost> = {
-  '/blog/post-1': {
-    title: 'AI in the Modern Workplace: A Guide for Businesses',
-    badge: 'Artificial Intelligence',
-    date: '04 Apr, 2025',
-    category: 'Artificial Intelligence',
-    summary: 'Explore how artificial intelligence is transforming business operations and creating new opportunities for growth and innovation.',
-    sections: [
-      { title: 'Why AI matters now', description: 'AI can streamline repetitive work, surface insights faster, and help teams focus on higher-value tasks.' },
-      { title: 'Where to start', description: 'Begin with a single use case, measure the outcome, and expand once the workflow proves useful.' },
-      { title: 'Keeping humans in the loop', description: 'The best results come from combining automation with thoughtful oversight and clear editorial judgment.' },
-    ],
-  },
-  '/blog/post-2': {
-    title: 'The Future of Remote Work: Building High-Performance Distributed Teams',
-    badge: 'Remote Work',
-    date: '28 Mar, 2025',
-    category: 'Remote Work',
-    summary: 'Discover strategies for creating successful remote teams and maintaining productivity in a distributed work environment.',
-    sections: [
-      { title: 'Design for clarity', description: 'Distributed teams do best when responsibilities, deadlines, and expectations are easy to see.' },
-      { title: 'Support communication', description: 'Async updates, shared documentation, and intentional meetings keep the team connected without overload.' },
-      { title: 'Measure outcomes', description: 'Focus on results and collaboration quality rather than presence or hours logged.' },
-    ],
-  },
-  '/blog/post-3': {
-    title: 'Cybersecurity in 2025: Protecting Your Business from Evolving Threats',
-    badge: 'Security',
-    date: '15 Mar, 2025',
-    category: 'Artificial Intelligence',
-    summary: 'Essential cybersecurity strategies and best practices to safeguard your business in an increasingly connected world.',
-    sections: [
-      { title: 'Threats are getting smarter', description: 'Phishing, account compromise, and supply chain risks continue to evolve with better tooling and automation.' },
-      { title: 'Core protections', description: 'MFA, patching, least privilege, and backup hygiene still deliver the biggest gains for most businesses.' },
-      { title: 'Train the team', description: 'Security awareness matters because many attacks still rely on human error and urgency.' },
-    ],
-  },
-  '/blog/post-4': {
-    title: 'Digital Transformation Roadmap: A Step-by-Step Guide for Modern Businesses',
-    badge: 'Digital Transformation',
-    date: '01 Mar, 2025',
-    category: 'Digital Transformation',
-    summary: 'Navigate your digital transformation journey with practical strategies and proven frameworks for successful organizational change.',
-    sections: [
-      { title: 'Start with the business case', description: 'Transformation works best when it is tied to a clear outcome, not just a technology upgrade.' },
-      { title: 'Build in phases', description: 'Small wins create momentum and reduce risk, especially when multiple teams are involved.' },
-      { title: 'Keep iterating', description: 'The roadmap should evolve as your users, tools, and market priorities change.' },
-    ],
   },
 };
 
@@ -730,7 +634,6 @@ function HomePage() {
       <GlobalNet />
       <Testimonials />
       <Projects />
-      <Blog />
       <FAQSection />
       <Newsletter />
       <ContactCTA />
@@ -974,7 +877,7 @@ function ServicesPage() {
                     {/* Bottom Right Button */}
                     <div className="mt-auto flex justify-end pt-6">
                       <a
-                        href="/contact"
+                        href="/portfolio"
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 transition-all duration-300 text-sm font-medium text-white group"
                       >
                         Learn More
@@ -1027,57 +930,6 @@ function PortfolioPage() {
             description="A few examples of how we approach design, development, and product experience."
           />
           <PortfolioCarouselGrid items={projects} />
-        </div>
-      </section>
-    </>
-  );
-}
-
-function BlogPage() {
-  usePageTitle('Blog | Vortex Cubes');
-
-  return (
-    <>
-      <PageHero
-        badge="Insights"
-        title="Stay updated with the latest in tech & design"
-        description="A collection of practical ideas around design, development, marketing, and digital transformation."
-      />
-      <section className="section bg-dark">
-        <div className="container">
-          <SectionTitle
-            badge="Latest Posts"
-            title="Stories, guides, and useful ideas"
-            description="Explore our curated articles designed to help your business stay ahead."
-          />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {blogCards.map((post) => (
-              <div key={post.title} className="blog-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1rem' }}>
-                <div className="blog-card-image-wrapper" style={{ flexShrink: 0 }}>
-                  <a href={post.href} style={{ display: 'block', width: '100%', height: '100%' }}>
-                    <img alt={post.title} className="blog-card-image" src={post.image} />
-                  </a>
-                </div>
-                <div className="blog-card-content mt-4" style={{ position: 'relative', flex: 1, paddingBottom: '72px' }}>
-                  <span className="blog-category-tag">{post.category}</span>
-                  <h4 className="blog-card-title">{post.title}</h4>
-                  <p className="blog-card-excerpt">{post.excerpt}</p>
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 30px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span className="blog-date">{post.date}</span>
-                    <a href={post.href} className="blog-read-more">
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
-                        Visit
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </>
@@ -1357,67 +1209,6 @@ function ServiceDetailPage({ pathname }: { pathname: string }) {
   );
 }
 
-function BlogDetailPage({ pathname }: { pathname: string }) {
-  const post = blogPosts[pathname];
-
-  usePageTitle(`${post?.title ?? 'Blog Post'} | Vortex Cubes`);
-
-  if (!post) {
-    return <NotFoundPage />;
-  }
-
-  return (
-    <>
-      <PageHero
-        badge={post.badge}
-        title={post.title}
-        description={post.summary}
-        ctas={[
-          { label: 'More Posts', href: '/blog' },
-          { label: 'Contact Us', href: '/contact' },
-        ]}
-      />
-      <section className="section bg-dark">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <article className="lg:col-span-2 card gradient-border bg-secondary/50">
-              <div className="flex items-center gap-4 flex-wrap mb-8">
-                <span className="badge">{post.category}</span>
-                <span className="text-text-light text-sm">{post.date}</span>
-              </div>
-              {post.sections.map((section) => (
-                <div key={section.title} className="mb-10 last:mb-0">
-                  <h2 className="text-h3 font-bold mb-4">{section.title}</h2>
-                  <p className="text-lg text-text-light">{section.description}</p>
-                </div>
-              ))}
-            </article>
-            <aside className="space-y-8">
-              <div className="card gradient-border bg-secondary/50">
-                <h3 className="text-h4 font-semibold mb-4">Related Topics</h3>
-                <InfoList
-                  items={[
-                    'Design systems and conversion',
-                    'Search visibility and SEO',
-                    'Remote collaboration workflows',
-                    'AI in content and operations',
-                  ]}
-                />
-              </div>
-              <div className="card gradient-border bg-secondary/50">
-                <p className="text-text-light mb-6">Want help turning an idea into a content or product strategy?</p>
-                <a href="/contact" className="btn btn-primary w-full justify-center">
-                  Talk to Us
-                </a>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
 function LegalPage({ pathname }: { pathname: string }) {
   const page = legalPages[pathname];
 
@@ -1607,7 +1398,6 @@ export function PageRouter({ pathname }: { pathname: string }) {
   if (normalizedPath === '/about') return <AboutPage />;
   if (normalizedPath === '/services') return <ServicesPage />;
   if (normalizedPath === '/portfolio' || normalizedPath === '/work') return <PortfolioPage />;
-  if (normalizedPath === '/blog') return <BlogPage />;
   if (normalizedPath === '/contact') return <ContactPage />;
   if (normalizedPath === '/teams') return <TeamPage />;
   if (normalizedPath === '/faq') return <FaqPage />;
@@ -1618,10 +1408,6 @@ export function PageRouter({ pathname }: { pathname: string }) {
 
   if (normalizedPath.startsWith('/services/')) {
     return <ServiceDetailPage pathname={normalizedPath} />;
-  }
-
-  if (normalizedPath.startsWith('/blog/post-')) {
-    return <BlogDetailPage pathname={normalizedPath} />;
   }
 
   return <NotFoundPage />;

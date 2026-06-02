@@ -18,7 +18,7 @@ const Sectors: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div className="badge">Sectors</div>
+          <div className="badge">Industries we serve</div>
           <h2 className="text-h2 font-bold uppercase">For Every Industry We have <span className="gradient-text">Solution</span></h2>
           <p className="text-lg text-text-light max-w-4xl">
             We deliver custom software solutions for every industry, enhancing productivity,

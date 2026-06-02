@@ -141,7 +141,7 @@ const GlobalNet: React.FC = () => {
     <section id="global" className="section bg-dark relative overflow-hidden py-24 md:py-32">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/5 blur-[120px] -z-1"></div>
-      
+
       <div className="container">
         <div className="flex flex-col lg:flex-row items-center gap-16">
           <div className="lg:w-1/2">
@@ -157,13 +157,13 @@ const GlobalNet: React.FC = () => {
                 Our <span className="gradient-text">Global Network</span>
               </h2>
               <p className="text-lg text-text-light mb-8 leading-relaxed max-w-[58ch] mx-auto lg:mx-0">
-                Our infrastructure is built for the world. With high-performance nodes across multiple continents, 
+                Our infrastructure is built for the world. With high-performance nodes across multiple continents,
                 we ensure your systems remain fast, reliable, and accessible from anywhere on the planet.
               </p>
               <div className="mt-4 flex flex-wrap gap-3 justify-center lg:justify-start">
                 {[
                   '99.99% Uptime',
-                  '25+ Countries',
+                  '7+ Countries',
                   '24/7 Global Support'
                 ].map((stat, i) => (
                   <span
@@ -176,9 +176,9 @@ const GlobalNet: React.FC = () => {
               </div>
             </motion.div>
           </div>
-          
+
           <div className="lg:w-1/2 flex justify-center">
-            <motion.div 
+            <motion.div
               className="w-full flex justify-center"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}

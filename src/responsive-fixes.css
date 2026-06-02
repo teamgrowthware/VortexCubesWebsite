@@ -86,7 +86,7 @@ section {
 
 /* Hero section responsive fixes */
 .hero {
-  height: 100vh;
+  min-height: 100vh;
   padding: 0;
   position: relative;
   overflow: hidden;
@@ -98,18 +98,18 @@ section {
      Pull hero backgrounds back up to align with the very top of the viewport. */
   margin-top: calc(var(--header-offset) * -1);
   padding-top: var(--header-offset);
+  padding-bottom: 80px;
 }
 
 .hero .container {
-  height: calc(100vh - var(--header-offset));
+  min-height: calc(100vh - var(--header-offset));
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hero .flex.flex-col {
-  max-height: calc(100vh - var(--header-offset));
-  overflow-y: auto;
+  min-height: auto;
   padding: 2rem 0;
 }
 

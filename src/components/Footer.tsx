@@ -166,7 +166,7 @@ const Footer: React.FC = () => {
                     transition={{ delay: 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <strong>Address:</strong> Indore, M.P - 452010
+                    <strong>Address:</strong>206, Shagun Arcade,Vijay nagar, Indore - (M.P.) 452010
                   </motion.li>
                 </ul>
               </motion.div>

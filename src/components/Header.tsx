@@ -136,7 +136,6 @@ const Header: React.FC = () => {
   ];
 
   const extraLinks = [
-    { href: '/blog', label: 'BLOG' },
     { href: '/career', label: 'CAREERS' },
     { href: '/privacy-policy', label: 'PRIVACY POLICY' },
     { href: '/terms-and-condition', label: 'TERMS & CONDITIONS' }
