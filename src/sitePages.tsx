@@ -1560,11 +1560,10 @@ export function BenchResourcesPage() {
                   <button
                     key={tech}
                     onClick={() => setSelectedTech(tech)}
-                    className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                      selectedTech === tech
+                    className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${selectedTech === tech
                         ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
                         : 'bg-dark/40 text-text-light hover:text-white border border-white/5 hover:border-white/10'
-                    }`}
+                      }`}
                   >
                     {tech}
                   </button>
@@ -1574,11 +1573,10 @@ export function BenchResourcesPage() {
               <div className="relative shrink-0 ml-2 z-10">
                 <button
                   onClick={() => setIsExperienceFilterOpen(!isExperienceFilterOpen)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 ${
-                    isExperienceFilterOpen || selectedExperience !== 'All Experience'
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 ${isExperienceFilterOpen || selectedExperience !== 'All Experience'
                       ? 'bg-blue-500/10 border-blue-500 text-white'
                       : 'bg-dark/40 border-white/10 text-text-light hover:text-white'
-                  }`}
+                    }`}
                 >
                   <span>Experience</span>
                   {selectedExperience !== 'All Experience' && (
@@ -1607,11 +1605,10 @@ export function BenchResourcesPage() {
                           setSelectedExperience(exp);
                           setIsExperienceFilterOpen(false);
                         }}
-                        className={`px-4 py-2.5 text-sm font-medium text-left transition-all duration-200 ${
-                          selectedExperience === exp
+                        className={`px-4 py-2.5 text-sm font-medium text-left transition-all duration-200 ${selectedExperience === exp
                             ? 'bg-blue-500/20 text-blue-400'
                             : 'text-text-light hover:bg-white/5 hover:text-white'
-                        }`}
+                          }`}
                       >
                         {exp}
                       </button>
