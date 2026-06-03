@@ -29,22 +29,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
 
       {/* Project Image */}
-      <div className="mx-5 mb-4 mt-4 rounded-xl overflow-hidden" style={{ height: '180px' }}>
+      <div className="mx-5 mb-5 mt-4 rounded-xl overflow-hidden" style={{ height: '180px' }}>
         <img
           alt={project.title}
           src={project.image}
           loading="lazy"
           className="w-full h-full object-cover"
         />
-      </div>
-
-      {/* Tags */}
-      <div className="px-5 pb-5 flex gap-2 flex-wrap mt-auto">
-        {project.tags.map((tag) => (
-          <span key={tag} className="badge" style={{ fontSize: '11px', padding: '2px 8px' }}>
-            {tag}
-          </span>
-        ))}
       </div>
     </motion.div>
   );

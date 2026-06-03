@@ -68,14 +68,6 @@ export default function ProjectModal() {
 
               <p className="modal-description">{selectedProject.fullDescription}</p>
 
-              <div className="modal-tags">
-                {selectedProject.tags.map((tag) => (
-                  <span key={tag} className="badge" style={{ fontSize: '11px', padding: '2px 8px' }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
 
             </div>
           </motion.div>

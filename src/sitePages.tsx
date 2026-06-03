@@ -456,7 +456,7 @@ function PortfolioCarouselGrid({
           <h3 className="text-base font-semibold gradient-text mb-1">{item.title}</h3>
           <p className="text-sm text-text-light leading-snug">{item.description}</p>
         </div>
-        <div className="mx-5 mb-4 mt-4 rounded-xl overflow-hidden" style={{ height: '170px' }}>
+        <div className="mx-5 mb-5 mt-4 rounded-xl overflow-hidden" style={{ height: '170px' }}>
           <img
             alt={item.title}
             src={item.image}
@@ -464,15 +464,6 @@ function PortfolioCarouselGrid({
             className="w-full h-full object-cover"
           />
         </div>
-        {item.tags && (
-          <div className="px-5 pb-5 flex gap-2 flex-wrap mt-auto">
-            {item.tags.map((tag) => (
-              <span key={tag} className="badge" style={{ fontSize: '11px', padding: '2px 8px' }}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
     );
   }
@@ -1377,6 +1368,535 @@ function FaqPage() {
   );
 }
 
+interface BenchMember {
+  name: string;
+  role: string;
+  experience: number;
+  techStack: string[];
+  chargePerHour: string;
+  availability: string;
+}
+
+export function BenchResourcesPage() {
+  usePageTitle('Bench Resources | Vortex Cubes');
+
+  const [selectedTech, setSelectedTech] = useState<string>('All');
+  const [selectedExperience, setSelectedExperience] = useState<string>('All Experience');
+  const [isExperienceFilterOpen, setIsExperienceFilterOpen] = useState<boolean>(false);
+  const [activeModalMember, setActiveModalMember] = useState<BenchMember | null>(null);
+
+  useEffect(() => {
+    if (activeModalMember) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeModalMember]);
+
+  const benchMembers: BenchMember[] = [
+    {
+      name: 'Alex Rivera',
+      role: 'Senior Backend Architect',
+      experience: 8,
+      techStack: ['Backend Development', 'DevOps'],
+      chargePerHour: '$75/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'Sarah Chen',
+      role: 'Machine Learning Engineer',
+      experience: 4,
+      techStack: ['AI/ML'],
+      chargePerHour: '$85/hr',
+      availability: 'Within 1 week',
+    },
+    {
+      name: 'Marcus Vance',
+      role: 'Full Stack Engineer',
+      experience: 6,
+      techStack: ['Full Stack', 'MERN Stack'],
+      chargePerHour: '$65/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'Elena Rostova',
+      role: 'AI Integration Specialist',
+      experience: 3,
+      techStack: ['AI/ML', 'Backend Development'],
+      chargePerHour: '$70/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'David Kim',
+      role: 'Mobile Developer',
+      experience: 2,
+      techStack: ['Mobile Development', 'Frontend Development'],
+      chargePerHour: '$50/hr',
+      availability: 'Within 2 weeks',
+    },
+    {
+      name: 'Aisha Rahman',
+      role: 'Senior AI Engineer',
+      experience: 7,
+      techStack: ['AI/ML'],
+      chargePerHour: '$90/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'Liam O\'Connor',
+      role: 'Frontend Engineer',
+      experience: 3,
+      techStack: ['Frontend Development'],
+      chargePerHour: '$60/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'Sofia Alvarez',
+      role: 'DevOps Engineer',
+      experience: 1,
+      techStack: ['DevOps'],
+      chargePerHour: '$45/hr',
+      availability: 'Within 1 week',
+    },
+    {
+      name: 'Devin Patel',
+      role: 'Data Scientist',
+      experience: 5,
+      techStack: ['AI/ML'],
+      chargePerHour: '$70/hr',
+      availability: 'Within 1 week',
+    },
+    {
+      name: 'Zoe Jenkins',
+      role: 'Full Stack AI Engineer',
+      experience: 6,
+      techStack: ['Full Stack', 'AI/ML'],
+      chargePerHour: '$80/hr',
+      availability: 'Immediate',
+    },
+    {
+      name: 'Hiroshi Tanaka',
+      role: 'ML Platform Architect',
+      experience: 9,
+      techStack: ['AI/ML', 'Backend Development'],
+      chargePerHour: '$95/hr',
+      availability: 'Within 2 weeks',
+    },
+    {
+      name: 'Chloe Baker',
+      role: 'MERN Stack Developer',
+      experience: 4,
+      techStack: ['MERN Stack', 'Frontend Development', 'Backend Development'],
+      chargePerHour: '$65/hr',
+      availability: 'Immediate',
+    },
+  ];
+
+  const techStackList = [
+    'All',
+    'MERN Stack',
+    'Full Stack',
+    'AI/ML',
+    'Frontend Development',
+    'Backend Development',
+    'DevOps',
+    'Mobile Development',
+  ];
+
+  const filteredMembers = benchMembers.filter((member) => {
+    const matchesTech = selectedTech === 'All' || member.techStack.includes(selectedTech);
+
+    let matchesExperience = true;
+    if (selectedExperience === '0-2 Years') {
+      matchesExperience = member.experience >= 0 && member.experience <= 2;
+    } else if (selectedExperience === '3-5 Years') {
+      matchesExperience = member.experience >= 3 && member.experience <= 5;
+    } else if (selectedExperience === '6+ Years') {
+      matchesExperience = member.experience >= 6;
+    }
+
+    return matchesTech && matchesExperience;
+  });
+
+  return (
+    <>
+      <PageHero
+        badge="Bench Resources"
+        title="Scale your engineering team on demand"
+        description="Browse our pre-vetted specialists ready to augment your engineering teams and accelerate your product roadmap."
+      />
+
+      <section className="section bg-dark">
+        <div className="container">
+          <SectionTitle
+            badge="Available Talent"
+            title="Pre-Vetted Specialists"
+            description="Use the filters below to find the right expertise for your project requirements."
+          />
+
+          {/* Filter Bar */}
+          <div className="flex flex-col gap-4 mb-10 w-full">
+            <style>{`
+              .tech-scrollbar-hide::-webkit-scrollbar {
+                display: none;
+              }
+              .tech-scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+            `}</style>
+            <div className="flex items-center justify-between gap-4 border border-white/10 bg-secondary/30 p-4 rounded-2xl w-full overflow-hidden">
+              <div className="flex gap-2 items-center overflow-x-auto tech-scrollbar-hide py-1 w-full mask-edges">
+                <style>{`
+                  .mask-edges {
+                    mask-image: linear-gradient(to right, black 95%, transparent 100%);
+                    -webkit-mask-image: linear-gradient(to right, black 95%, transparent 100%);
+                  }
+                `}</style>
+                {techStackList.map((tech) => (
+                  <button
+                    key={tech}
+                    onClick={() => setSelectedTech(tech)}
+                    className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                      selectedTech === tech
+                        ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                        : 'bg-dark/40 text-text-light hover:text-white border border-white/5 hover:border-white/10'
+                    }`}
+                  >
+                    {tech}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative shrink-0 ml-2 z-10">
+                <button
+                  onClick={() => setIsExperienceFilterOpen(!isExperienceFilterOpen)}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 ${
+                    isExperienceFilterOpen || selectedExperience !== 'All Experience'
+                      ? 'bg-blue-500/10 border-blue-500 text-white'
+                      : 'bg-dark/40 border-white/10 text-text-light hover:text-white'
+                  }`}
+                >
+                  <span>Experience</span>
+                  {selectedExperience !== 'All Experience' && (
+                    <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                      {selectedExperience.split(' ')[0]}
+                    </span>
+                  )}
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-300 ${isExperienceFilterOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Experience Filter Dropdown */}
+                {isExperienceFilterOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl border border-white/10 bg-[#161b22] backdrop-blur-md shadow-2xl overflow-hidden z-50 flex flex-col py-2 transition-all duration-300">
+                    {['All Experience', '0-2 Years', '3-5 Years', '6+ Years'].map((exp) => (
+                      <button
+                        key={exp}
+                        onClick={() => {
+                          setSelectedExperience(exp);
+                          setIsExperienceFilterOpen(false);
+                        }}
+                        className={`px-4 py-2.5 text-sm font-medium text-left transition-all duration-200 ${
+                          selectedExperience === exp
+                            ? 'bg-blue-500/20 text-blue-400'
+                            : 'text-text-light hover:bg-white/5 hover:text-white'
+                        }`}
+                      >
+                        {exp}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          {filteredMembers.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredMembers.map((member) => (
+                <div
+                  key={member.name}
+                  onClick={() => setActiveModalMember(member)}
+                  className="card gradient-border bg-secondary/50 flex flex-col justify-between p-8 cursor-pointer relative overflow-hidden text-left"
+                  style={{
+                    transition: 'transform 0.35s ease, box-shadow 0.35s ease',
+                    transform: 'translateY(0)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-12px)';
+                    e.currentTarget.style.boxShadow = '0 25px 50px rgba(59, 130, 246, 0.25)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div>
+                    {/* Header Row: Name on Left, Experience (borderless) on Right */}
+                    <div className="flex justify-between items-start gap-4 mb-4" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', marginBottom: '16px' }}>
+                      <h3 className="text-xl font-bold text-white" style={{ fontSize: '18px', lineHeight: '1.4' }}>
+                        {member.name}
+                      </h3>
+                      <span
+                        className="text-xs px-2.5 py-1 rounded-full font-semibold bg-blue-500/10 text-blue-400 whitespace-nowrap"
+                        style={{ fontSize: '11px', display: 'inline-block', border: 'none' }}
+                      >
+                        {member.experience} Years Exp
+                      </span>
+                    </div>
+                    <p className="text-text-light font-medium mb-6 text-sm">{member.role}</p>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-white/5">
+                    <span className="text-xs text-text-light/60 block mb-2 font-medium">Key Technologies:</span>
+                    <div className="flex flex-wrap" style={{ gap: '8px 12px' }}>
+                      {member.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="bg-white/5 text-white/90 text-[11px] px-2.5 py-1 rounded-lg font-semibold"
+                          style={{ border: 'none' }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // Empty State
+            <div className="card gradient-border bg-secondary/50 text-center py-16 flex flex-col items-center justify-center">
+              <div className="text-5xl mb-4 text-text-light/50">🔍</div>
+              <h3 className="text-2xl font-bold mb-2">No Match Found</h3>
+              <p className="text-text-light max-w-md">
+                We couldn't find any team members matching both the selected technology filter (
+                <span className="text-white font-medium">{selectedTech}</span>) and experience range (
+                <span className="text-white font-medium">{selectedExperience}</span>).
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedTech('All');
+                  setSelectedExperience('All Experience');
+                }}
+                className="btn btn-primary mt-6 text-sm"
+              >
+                Reset Filters
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Modal Popup Details */}
+      {activeModalMember && (
+        <div
+          className="fixed inset-0 z-50 flex justify-center p-4 animate-fade-in"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '80px 16px 40px 16px',
+            overflowY: 'auto',
+          }}
+        >
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+            onClick={() => setActiveModalMember(null)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(8px)',
+              zIndex: 1,
+            }}
+          />
+
+          {/* Modal Card */}
+          <div
+            className="card gradient-border bg-dark max-w-lg w-full relative z-10 p-6 sm:p-8 shadow-2xl border border-white/10"
+            style={{
+              maxWidth: '500px',
+              width: '100%',
+              position: 'relative',
+              zIndex: 1010,
+              backgroundColor: '#0a0a0a',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              margin: 'auto',
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setActiveModalMember(null)}
+              className="absolute text-text-light hover:text-white transition-colors duration-200"
+              style={{
+                position: 'absolute',
+                top: '24px',
+                right: '24px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#a0a0a0',
+                cursor: 'pointer',
+                fontSize: '14px',
+              }}
+            >
+              ✕
+            </button>
+
+            <div className="mb-6" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-gray-900/50 backdrop-blur-sm" style={{ marginBottom: '12px' }}>
+                <span className="text-sm font-medium text-white">Candidate Profile</span>
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-1" style={{ fontSize: '24px', fontWeight: '800' }}>
+                {activeModalMember.name}
+              </h2>
+              <p className="text-primary text-sm font-semibold">{activeModalMember.role}</p>
+            </div>
+
+            <div className="space-y-4 mb-8" style={{ marginBottom: '24px' }}>
+              <div
+                className="grid grid-cols-2 gap-4 border-b border-white/5 pb-4"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '16px',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                  paddingBottom: '16px',
+                }}
+              >
+                <div>
+                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                    EXPERIENCE
+                  </span>
+                  <span className="text-white text-base font-semibold">{activeModalMember.experience} Years</span>
+                </div>
+                <div>
+                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                    HOURLY RATE
+                  </span>
+                  <span className="text-white text-base font-semibold">{activeModalMember.chargePerHour}</span>
+                </div>
+              </div>
+
+              <div
+                className="grid grid-cols-1 gap-2 border-b border-white/5 pb-4"
+                style={{
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                  paddingBottom: '16px',
+                }}
+              >
+                <div>
+                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                    INTERVIEW AVAILABILITY
+                  </span>
+                  <div className="flex items-center gap-2" style={{ display: 'flex', alignItems: 'center' }}>
+                    <span
+                      className={`w-2 h-2 rounded-full ${activeModalMember.availability === 'Immediate' ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        display: 'inline-block',
+                        backgroundColor: activeModalMember.availability === 'Immediate' ? '#10b981' : '#f59e0b',
+                        marginRight: '8px',
+                      }}
+                    />
+                    <span className="text-white text-base font-semibold">{activeModalMember.availability}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-2" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                  KEY TECHNOLOGIES
+                </span>
+                <div className="flex flex-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 10px' }}>
+                  {activeModalMember.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="bg-white/5 text-white/90 text-xs px-3 py-1.5 rounded-lg border border-white/5 font-semibold"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                        padding: '4px 10px',
+                        borderRadius: '8px',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        color: '#f3f4f6',
+                      }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4" style={{ display: 'flex', gap: '16px' }}>
+              <button
+                onClick={() => setActiveModalMember(null)}
+                className="btn text-white"
+                style={{
+                  flex: 1,
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  textAlign: 'center',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                }}
+              >
+                Close Profile
+              </button>
+              <a
+                href="/contact"
+                className="btn btn-primary"
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  fontWeight: '600',
+                }}
+              >
+                Request Interview
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 function NotFoundPage() {
   usePageTitle('Page Not Found | Vortex Cubes');
 
@@ -1409,6 +1929,7 @@ export function PageRouter({ pathname }: { pathname: string }) {
   if (normalizedPath === '/teams') return <TeamPage />;
   if (normalizedPath === '/faq') return <FaqPage />;
   if (normalizedPath === '/career') return <CareerPage />;
+  if (normalizedPath === '/bench-resources') return <BenchResourcesPage />;
   if (normalizedPath === '/privacy-policy' || normalizedPath === '/terms-and-condition' || normalizedPath === '/elements' || normalizedPath === '/career/full-stack-developer') {
     return <LegalPage pathname={normalizedPath} />;
   }
