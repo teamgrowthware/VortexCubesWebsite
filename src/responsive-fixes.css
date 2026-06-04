@@ -1236,3 +1236,60 @@ img {
     display: none;
   }
 }
+
+/* Missing background opacity utility classes */
+.bg-dark\/40 {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .bg-dark\/40 {
+    background-color: color-mix(in oklab, var(--color-dark, #000) 40%, transparent) !important;
+  }
+}
+
+.bg-dark\/60 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .bg-dark\/60 {
+    background-color: color-mix(in oklab, var(--color-dark, #000) 60%, transparent) !important;
+  }
+}
+
+.bg-dark\/80 {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .bg-dark\/80 {
+    background-color: color-mix(in oklab, var(--color-dark, #000) 80%, transparent) !important;
+  }
+}
+
+/* Missing border opacity utility classes */
+.border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .border-white\/5 {
+    border-color: color-mix(in oklab, var(--color-white, #fff) 5%, transparent) !important;
+  }
+}
+
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .border-white\/10 {
+    border-color: color-mix(in oklab, var(--color-white, #fff) 10%, transparent) !important;
+  }
+}
+
+.hover\:border-white\/10:hover {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+@supports (color:color-mix(in lab, red, red)) {
+  .hover\:border-white\/10:hover {
+    border-color: color-mix(in oklab, var(--color-white, #fff) 10%, transparent) !important;
+  }
+}
+

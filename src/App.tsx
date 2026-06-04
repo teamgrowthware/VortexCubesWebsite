@@ -9,16 +9,17 @@ import ProjectModal from './components/ProjectModal';
 
 function App() {
   const pathname = window.location.pathname;
+  const isAdminRoute = pathname.startsWith('/admin');
 
   return (
     <ProjectModalProvider>
       <div className="App w-full">
-        <Header />
+        {!isAdminRoute && <Header />}
         <main className="w-full page-content">
           <PageRouter pathname={pathname} />
         </main>
-        <Footer />
-        <ProjectModal />
+        {!isAdminRoute && <Footer />}
+        {!isAdminRoute && <ProjectModal />}
       </div>
     </ProjectModalProvider>
   );

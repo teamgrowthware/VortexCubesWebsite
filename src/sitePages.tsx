@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import Projects from './components/Projects';
@@ -13,6 +13,16 @@ import ContactCTA from './components/ContactCTA';
 import { projects, type Project } from './data/projects';
 import { useProjectModal } from './contexts/ProjectModalContext';
 import { sendContactEmail } from './services/email';
+import {
+  createBenchResource,
+  deleteBenchResource,
+  getAdminBenchResources,
+  getPublicBenchResources,
+  loginAdmin,
+  signupAdmin,
+  updateBenchResource,
+} from './services/benchResources';
+import type { BenchResource, BenchResourcePayload } from './types/benchResources';
 
 type LinkItem = {
   label: string;
@@ -1368,22 +1378,69 @@ function FaqPage() {
   );
 }
 
-interface BenchMember {
-  name: string;
-  role: string;
-  experience: number;
-  techStack: string[];
-  chargePerHour: string;
-  availability: string;
-}
+const TECH_STACK_OPTIONS = [
+  'MERN Stack',
+  'Full Stack',
+  'AI/ML',
+  'Frontend Development',
+  'Backend Development',
+  'DevOps',
+  'Mobile Development',
+];
+
+const AVAILABILITY_OPTIONS = ['Immediate', 'Within 1 week', 'Within 2 weeks'];
+
+const emptyBenchResourceForm: BenchResourcePayload = {
+  name: '',
+  role: '',
+  experience: 0,
+  techStack: [],
+  chargePerHour: '',
+  availability: 'Immediate',
+  isActive: true,
+  sortOrder: 0,
+};
 
 export function BenchResourcesPage() {
   usePageTitle('Bench Resources | Vortex Cubes');
 
+  const [benchMembers, setBenchMembers] = useState<BenchResource[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
   const [selectedTech, setSelectedTech] = useState<string>('All');
   const [selectedExperience, setSelectedExperience] = useState<string>('All Experience');
   const [isExperienceFilterOpen, setIsExperienceFilterOpen] = useState<boolean>(false);
-  const [activeModalMember, setActiveModalMember] = useState<BenchMember | null>(null);
+  const [activeModalMember, setActiveModalMember] = useState<BenchResource | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadBenchResources() {
+      setIsLoading(true);
+      setError('');
+
+      try {
+        const resources = await getPublicBenchResources();
+        if (isMounted) {
+          setBenchMembers(resources);
+        }
+      } catch (requestError) {
+        if (isMounted) {
+          setError(requestError instanceof Error ? requestError.message : 'Unable to load bench resources.');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadBenchResources();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (activeModalMember) {
@@ -1396,115 +1453,7 @@ export function BenchResourcesPage() {
     };
   }, [activeModalMember]);
 
-  const benchMembers: BenchMember[] = [
-    {
-      name: 'Alex Rivera',
-      role: 'Senior Backend Architect',
-      experience: 8,
-      techStack: ['Backend Development', 'DevOps'],
-      chargePerHour: '$75/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'Sarah Chen',
-      role: 'Machine Learning Engineer',
-      experience: 4,
-      techStack: ['AI/ML'],
-      chargePerHour: '$85/hr',
-      availability: 'Within 1 week',
-    },
-    {
-      name: 'Marcus Vance',
-      role: 'Full Stack Engineer',
-      experience: 6,
-      techStack: ['Full Stack', 'MERN Stack'],
-      chargePerHour: '$65/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'Elena Rostova',
-      role: 'AI Integration Specialist',
-      experience: 3,
-      techStack: ['AI/ML', 'Backend Development'],
-      chargePerHour: '$70/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'David Kim',
-      role: 'Mobile Developer',
-      experience: 2,
-      techStack: ['Mobile Development', 'Frontend Development'],
-      chargePerHour: '$50/hr',
-      availability: 'Within 2 weeks',
-    },
-    {
-      name: 'Aisha Rahman',
-      role: 'Senior AI Engineer',
-      experience: 7,
-      techStack: ['AI/ML'],
-      chargePerHour: '$90/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'Liam O\'Connor',
-      role: 'Frontend Engineer',
-      experience: 3,
-      techStack: ['Frontend Development'],
-      chargePerHour: '$60/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'Sofia Alvarez',
-      role: 'DevOps Engineer',
-      experience: 1,
-      techStack: ['DevOps'],
-      chargePerHour: '$45/hr',
-      availability: 'Within 1 week',
-    },
-    {
-      name: 'Devin Patel',
-      role: 'Data Scientist',
-      experience: 5,
-      techStack: ['AI/ML'],
-      chargePerHour: '$70/hr',
-      availability: 'Within 1 week',
-    },
-    {
-      name: 'Zoe Jenkins',
-      role: 'Full Stack AI Engineer',
-      experience: 6,
-      techStack: ['Full Stack', 'AI/ML'],
-      chargePerHour: '$80/hr',
-      availability: 'Immediate',
-    },
-    {
-      name: 'Hiroshi Tanaka',
-      role: 'ML Platform Architect',
-      experience: 9,
-      techStack: ['AI/ML', 'Backend Development'],
-      chargePerHour: '$95/hr',
-      availability: 'Within 2 weeks',
-    },
-    {
-      name: 'Chloe Baker',
-      role: 'MERN Stack Developer',
-      experience: 4,
-      techStack: ['MERN Stack', 'Frontend Development', 'Backend Development'],
-      chargePerHour: '$65/hr',
-      availability: 'Immediate',
-    },
-  ];
-
-  const techStackList = [
-    'All',
-    'MERN Stack',
-    'Full Stack',
-    'AI/ML',
-    'Frontend Development',
-    'Backend Development',
-    'DevOps',
-    'Mobile Development',
-  ];
+  const techStackList = ['All', ...TECH_STACK_OPTIONS];
 
   const filteredMembers = benchMembers.filter((member) => {
     const matchesTech = selectedTech === 'All' || member.techStack.includes(selectedTech);
@@ -1620,11 +1569,21 @@ export function BenchResourcesPage() {
           </div>
 
           {/* Cards Grid */}
-          {filteredMembers.length > 0 ? (
+          {isLoading ? (
+            <div className="card gradient-border bg-secondary/50 text-center py-16 flex flex-col items-center justify-center">
+              <h3 className="text-2xl font-bold mb-2">Loading Bench Resources</h3>
+              <p className="text-text-light max-w-md">Fetching the latest available specialists.</p>
+            </div>
+          ) : error ? (
+            <div className="card gradient-border bg-secondary/50 text-center py-16 flex flex-col items-center justify-center">
+              <h3 className="text-2xl font-bold mb-2">Unable to Load Resources</h3>
+              <p className="text-text-light max-w-md">{error}</p>
+            </div>
+          ) : filteredMembers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMembers.map((member) => (
                 <div
-                  key={member.name}
+                  key={member._id || member.name}
                   onClick={() => setActiveModalMember(member)}
                   className="card gradient-border bg-secondary/50 flex flex-col justify-between p-8 cursor-pointer relative overflow-hidden text-left"
                   style={{
@@ -1894,6 +1853,471 @@ export function BenchResourcesPage() {
   );
 }
 
+function getStoredAdminToken() {
+  return window.localStorage.getItem('vortexAdminToken') || '';
+}
+
+function storeAdminSession(token: string) {
+  window.localStorage.setItem('vortexAdminToken', token);
+}
+
+function clearAdminSession() {
+  window.localStorage.removeItem('vortexAdminToken');
+}
+
+function navigateTo(path: string) {
+  window.location.href = path;
+}
+
+function AdminAuthPage({ mode }: { mode: 'login' | 'signup' }) {
+  const isSignup = mode === 'signup';
+  usePageTitle(`${isSignup ? 'Admin Signup' : 'Admin Login'} | Vortex Cubes`);
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError('');
+
+    if (isSignup && password !== confirmPassword) {
+      setError('Password and confirm password must match.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = isSignup
+        ? await signupAdmin({ name, email, password })
+        : await loginAdmin({ email, password });
+
+      storeAdminSession(response.token);
+      navigateTo('/admin/bench-resources');
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Authentication failed.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <section className="section bg-dark min-h-screen flex items-center">
+      <div className="container">
+        <div className="max-w-md mx-auto card gradient-border bg-secondary/50 p-8">
+          <div className="text-center mb-8">
+            <div className="badge mb-4">{isSignup ? 'Create Admin' : 'Admin Access'}</div>
+            <h1 className="text-3xl font-bold text-white">{isSignup ? 'Signup' : 'Login'}</h1>
+          </div>
+
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            {isSignup ? (
+              <label className="flex flex-col gap-2 text-sm text-text-light">
+                Name
+                <input
+                  className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                />
+              </label>
+            ) : null}
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Email
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Password
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                minLength={8}
+                required
+              />
+            </label>
+
+            {isSignup ? (
+              <label className="flex flex-col gap-2 text-sm text-text-light">
+                Confirm Password
+                <input
+                  className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  minLength={8}
+                  required
+                />
+              </label>
+            ) : null}
+
+            {error ? <p className="text-sm text-red-400">{error}</p> : null}
+
+            <button className="btn btn-primary mt-2" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Please wait...' : isSignup ? 'Create Account' : 'Login'}
+            </button>
+          </form>
+
+          <div className="text-center mt-6 text-sm text-text-light">
+            {isSignup ? (
+              <a className="text-blue-400 hover:text-white" href="/admin/login">
+                Already have an account? Login
+              </a>
+            ) : (
+              <a className="text-blue-400 hover:text-white" href="/admin/signup">
+                Need an admin account? Signup
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AdminBenchResourcesPage() {
+  usePageTitle('Manage Bench Resources | Vortex Cubes');
+
+  const [token] = useState(() => getStoredAdminToken());
+  const [resources, setResources] = useState<BenchResource[]>([]);
+  const [formData, setFormData] = useState<BenchResourcePayload>(emptyBenchResourceForm);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<BenchResource | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const loadResources = useCallback(async () => {
+    if (!token) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const data = await getAdminBenchResources(token);
+      setResources(data);
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Unable to load bench resources.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (!token) {
+      navigateTo('/admin/login');
+      return;
+    }
+
+    queueMicrotask(() => {
+      loadResources();
+    });
+  }, [loadResources, token]);
+
+  function updateField<Key extends keyof BenchResourcePayload>(key: Key, value: BenchResourcePayload[Key]) {
+    setFormData((current) => ({ ...current, [key]: value }));
+  }
+
+  function toggleTechStack(tech: string) {
+    setFormData((current) => {
+      const hasTech = current.techStack.includes(tech);
+      return {
+        ...current,
+        techStack: hasTech
+          ? current.techStack.filter((item) => item !== tech)
+          : [...current.techStack, tech],
+      };
+    });
+  }
+
+  function resetForm() {
+    setFormData(emptyBenchResourceForm);
+    setEditingId(null);
+  }
+
+  function startEdit(resource: BenchResource) {
+    setEditingId(resource._id || resource.id || null);
+    setFormData({
+      name: resource.name,
+      role: resource.role,
+      experience: resource.experience,
+      techStack: resource.techStack,
+      chargePerHour: resource.chargePerHour,
+      availability: resource.availability,
+      isActive: resource.isActive ?? true,
+      sortOrder: resource.sortOrder ?? 0,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError('');
+
+    if (formData.techStack.length === 0) {
+      setError('Select at least one technology.');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      if (editingId) {
+        await updateBenchResource(editingId, formData, token);
+      } else {
+        await createBenchResource(formData, token);
+      }
+
+      resetForm();
+      await loadResources();
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Unable to save bench resource.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function confirmDelete() {
+    const resourceId = deleteTarget?._id || deleteTarget?.id;
+    if (!resourceId || !token) return;
+
+    setError('');
+
+    try {
+      await deleteBenchResource(resourceId, token);
+      setDeleteTarget(null);
+      await loadResources();
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Unable to delete bench resource.');
+    }
+  }
+
+  function handleLogout() {
+    clearAdminSession();
+    navigateTo('/admin/login');
+  }
+
+  return (
+    <section className="section bg-dark min-h-screen">
+      <div className="container">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div>
+            <div className="badge mb-4">Admin Panel</div>
+            <h1 className="text-4xl font-bold text-white">Bench Resources</h1>
+          </div>
+          <button className="btn" type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+
+        <form className="card gradient-border bg-secondary/50 p-6 mb-10" onSubmit={handleSubmit}>
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <h2 className="text-2xl font-bold text-white">{editingId ? 'Update Resource' : 'Add Resource'}</h2>
+            {editingId ? (
+              <button className="btn text-sm" type="button" onClick={resetForm}>
+                Cancel Edit
+              </button>
+            ) : null}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Name
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                value={formData.name}
+                onChange={(event) => updateField('name', event.target.value)}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Role
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                value={formData.role}
+                onChange={(event) => updateField('role', event.target.value)}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Experience
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                type="number"
+                min="0"
+                value={formData.experience}
+                onChange={(event) => updateField('experience', Number(event.target.value))}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Hourly Rate
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                placeholder="$75/hr"
+                value={formData.chargePerHour}
+                onChange={(event) => updateField('chargePerHour', event.target.value)}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Availability
+              <select
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                value={formData.availability}
+                onChange={(event) => updateField('availability', event.target.value)}
+              >
+                {AVAILABILITY_OPTIONS.map((availability) => (
+                  <option key={availability} value={availability}>
+                    {availability}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm text-text-light">
+              Sort Order
+              <input
+                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                type="number"
+                value={formData.sortOrder}
+                onChange={(event) => updateField('sortOrder', Number(event.target.value))}
+              />
+            </label>
+          </div>
+
+          <div className="mt-5">
+            <span className="text-sm text-text-light block mb-3">Tech Stack</span>
+            <div className="flex flex-wrap gap-2">
+              {TECH_STACK_OPTIONS.map((tech) => (
+                <button
+                  key={tech}
+                  type="button"
+                  onClick={() => toggleTechStack(tech)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${formData.techStack.includes(tech)
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                      : 'bg-dark/40 text-text-light hover:text-white border border-white/5 hover:border-white/10'
+                    }`}
+                >
+                  {tech}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <label className="flex items-center gap-3 mt-5 text-sm text-text-light">
+            <input
+              type="checkbox"
+              checked={formData.isActive}
+              onChange={(event) => updateField('isActive', event.target.checked)}
+            />
+            Active on public Bench Resources page
+          </label>
+
+          {error ? <p className="text-sm text-red-400 mt-4">{error}</p> : null}
+
+          <button className="btn btn-primary mt-6" type="submit" disabled={isSaving}>
+            {isSaving ? 'Saving...' : editingId ? 'Update Resource' : 'Add Resource'}
+          </button>
+        </form>
+
+        <div className="card gradient-border bg-secondary/50 overflow-hidden">
+          <div className="p-6 border-b border-white/10">
+            <h2 className="text-2xl font-bold text-white">Resources List</h2>
+          </div>
+
+          {isLoading ? (
+            <div className="p-6 text-text-light">Loading resources...</div>
+          ) : resources.length === 0 ? (
+            <div className="p-6 text-text-light">No bench resources have been added yet.</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-dark/40 text-text-light text-xs uppercase">
+                  <tr>
+                    <th className="px-4 py-3">Name</th>
+                    <th className="px-4 py-3">Role</th>
+                    <th className="px-4 py-3">Exp</th>
+                    <th className="px-4 py-3">Tech Stack</th>
+                    <th className="px-4 py-3">Rate</th>
+                    <th className="px-4 py-3">Availability</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {resources.map((resource) => (
+                    <tr key={resource._id || resource.name} className="border-t border-white/5">
+                      <td className="px-4 py-4 text-white font-semibold">{resource.name}</td>
+                      <td className="px-4 py-4 text-text-light">{resource.role}</td>
+                      <td className="px-4 py-4 text-text-light">{resource.experience}</td>
+                      <td className="px-4 py-4 text-text-light">{resource.techStack.join(', ')}</td>
+                      <td className="px-4 py-4 text-text-light">{resource.chargePerHour}</td>
+                      <td className="px-4 py-4 text-text-light">{resource.availability}</td>
+                      <td className="px-4 py-4">
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${resource.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                          {resource.isActive ? 'Active' : 'Hidden'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex gap-2">
+                          <button className="btn text-xs px-3 py-2" type="button" onClick={() => startEdit(resource)}>
+                            Edit
+                          </button>
+                          <button className="btn text-xs px-3 py-2" type="button" onClick={() => setDeleteTarget(resource)}>
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {deleteTarget ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={() => setDeleteTarget(null)} />
+          <div className="card gradient-border bg-dark max-w-md w-full relative z-10 p-6">
+            <h2 className="text-2xl font-bold text-white mb-3">Delete Resource</h2>
+            <p className="text-text-light mb-6">
+              Delete {deleteTarget.name}? This removes the resource from the admin panel and public Bench Resources page.
+            </p>
+            <div className="flex gap-3">
+              <button className="btn flex-1" type="button" onClick={() => setDeleteTarget(null)}>
+                Cancel
+              </button>
+              <button className="btn btn-primary flex-1" type="button" onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 function NotFoundPage() {
   usePageTitle('Page Not Found | Vortex Cubes');
 
@@ -1927,6 +2351,9 @@ export function PageRouter({ pathname }: { pathname: string }) {
   if (normalizedPath === '/faq') return <FaqPage />;
   if (normalizedPath === '/career') return <CareerPage />;
   if (normalizedPath === '/bench-resources') return <BenchResourcesPage />;
+  if (normalizedPath === '/admin/login') return <AdminAuthPage mode="login" />;
+  if (normalizedPath === '/admin/signup') return <AdminAuthPage mode="signup" />;
+  if (normalizedPath === '/admin/bench-resources') return <AdminBenchResourcesPage />;
   if (normalizedPath === '/privacy-policy' || normalizedPath === '/terms-and-condition' || normalizedPath === '/elements' || normalizedPath === '/career/full-stack-developer') {
     return <LegalPage pathname={normalizedPath} />;
   }
