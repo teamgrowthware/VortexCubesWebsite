@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import React from 'react';
+import { motion, type Variants } from 'framer-motion';
 
 interface TechItem {
   name: string;
-  category: string;
   slug?: string;
-  color?: string;
+  showLabel?: boolean;
   customIcon?: React.ReactNode;
+}
+
+interface TechCategory {
+  id: string;
+  label: string;
+  gridClass: string;
+  items: TechItem[];
 }
 
 const SVG_PATHS: Record<string, string> = {
@@ -27,12 +33,13 @@ const SVG_PATHS: Record<string, string> = {
   tailwindcss: "M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z",
   linux: "M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.05v.02h.003z",
   tensorflow: "M1.292 5.856L11.54 0v24l-4.095-2.378V7.603l-6.168 3.564.015-5.31zm21.43 5.311l-.014-5.31L12.46 0v24l4.095-2.378V14.87l3.092 1.788-.018-4.618-3.074-1.756V7.603l6.168 3.564z",
-  pytorch: "M12.005 0L4.952 7.053a9.865 9.865 0 000 14.022 9.865 9.865 0 0014.022 0c3.984-3.9 3.986-10.205.085-14.023l-1.744 1.743c2.904 2.905 2.904 7.634 0 10.538s-7.634 2.904-10.538 0-2.904-7.634 0-10.538l4.647-4.646.582-.665zm3.568 3.899a1.327 1.327 0 00-1.327 1.327 1.327 1.327 0 001.327 1.328A1.327 1.327 0 0016.9 5.226 1.327 1.327 0 0015.573 3.9z"
+  pytorch: "M12.005 0L4.952 7.053a9.865 9.865 0 000 14.022 9.865 9.865 0 0014.022 0c3.984-3.9 3.986-10.205.085-14.023l-1.744 1.743c2.904 2.905 2.904 7.634 0 10.538s-7.634 2.904-10.538 0-2.904-7.634 0-10.538l4.647-4.646.582-.665zm3.568 3.899a1.327 1.327 0 00-1.327 1.327 1.327 1.327 0 001.327 1.328A1.327 1.327 0 0016.9 5.226 1.327 1.327 0 0015.573 3.9z",
+  git: "M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.187 0L8.708 2.624l2.76 2.76c.645-.215 1.379-.07 1.889.44.516.515.655 1.258.42 1.9l2.72 2.72c.646-.236 1.388-.096 1.904.42.66.659.66 1.73 0 2.39-.66.66-1.73.66-2.39 0-.527-.527-.664-1.285-.42-1.91l-2.72-2.72c-.186.068-.38.105-.58.105-.47 0-.9-.18-1.23-.51-.34-.33-.52-.77-.52-1.24 0-.21.04-.41.11-.6l-2.75-2.75L.454 13.07c-.604.604-.604 1.582 0 2.187l10.48 10.48c.604.604 1.582.604 2.187 0l10.425-10.425c.604-.604.604-1.582 0-2.187z"
 };
 
 const Technologies: React.FC = () => {
   const restApiIcon = (
-    <svg className="w-10 h-10 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="16" y="16" width="6" height="6" rx="1" />
       <rect x="2" y="16" width="6" height="6" rx="1" />
       <rect x="9" y="2" width="6" height="6" rx="1" />
@@ -41,27 +48,76 @@ const Technologies: React.FC = () => {
     </svg>
   );
 
-  const techItems: TechItem[] = [
-    { name: 'React.js', category: 'Frontend', slug: 'react', color: '#61DAFB' },
-    { name: 'Next.js', category: 'Framework', slug: 'nextdotjs', color: '#FFFFFF' },
-    { name: 'Node.js', category: 'Backend Core', slug: 'nodedotjs', color: '#339933' },
-    { name: 'Express.js', category: 'Web Server', slug: 'express', color: '#FFFFFF' },
-    { name: 'MongoDB', category: 'NoSQL Database', slug: 'mongodb', color: '#47A248' },
-    { name: 'PostgreSQL', category: 'SQL Database', slug: 'postgresql', color: '#4169E1' },
-    { name: 'TypeScript', category: 'Language', slug: 'typescript', color: '#3178C6' },
-    { name: 'Python', category: 'Language', slug: 'python', color: '#3776AB' },
-    { name: 'FastAPI', category: 'API Framework', slug: 'fastapi', color: '#009688' },
-    { name: 'LangChain', category: 'AI Orchestration', slug: 'langchain', color: '#FFFFFF' },
-    { name: 'Docker', category: 'Containerization', slug: 'docker', color: '#2496ED' },
-    { name: 'Kubernetes', category: 'Orchestration', slug: 'kubernetes', color: '#326CE5' },
-    { name: 'AWS', category: 'Infrastructure', slug: 'amazonwebservices', color: '#FF9900' },
-    { name: 'Jenkins', category: 'CI/CD Automation', slug: 'jenkins', color: '#D24939' },
-    { name: 'Git', category: 'Version Control', slug: 'git', color: '#F05032' },
-    { name: 'Tailwind CSS', category: 'Styling', slug: 'tailwindcss', color: '#06B6D4' },
-    { name: 'REST APIs', category: 'API Architecture', customIcon: restApiIcon },
-    { name: 'Linux', category: 'Operating System', slug: 'linux', color: '#FCC624' },
-    { name: 'TensorFlow', category: 'Machine Learning', slug: 'tensorflow', color: '#FF6F00' },
-    { name: 'PyTorch', category: 'Deep Learning', slug: 'pytorch', color: '#EE4C2C' }
+  const techCategories: TechCategory[] = [
+    {
+      id: 'biz-app',
+      label: 'Business Application Development',
+      gridClass: 'panel-biz-app',
+      items: [
+        { name: 'Next.js', slug: 'nextdotjs' },
+        { name: 'Node.js', slug: 'nodedotjs' },
+        { name: 'Express.js', slug: 'express' },
+        { name: 'TypeScript', slug: 'typescript' },
+        { name: 'Python', slug: 'python' }
+      ]
+    },
+    {
+      id: 'data-ai',
+      label: 'Data & AI Engineering',
+      gridClass: 'panel-data-ai',
+      items: [
+        { name: 'TensorFlow', slug: 'tensorflow' },
+        { name: 'PyTorch', slug: 'pytorch' },
+        { name: 'LangChain', slug: 'langchain' },
+        { name: 'FastAPI', slug: 'fastapi' }
+      ]
+    },
+    {
+      id: 'databases',
+      label: 'Databases',
+      gridClass: 'panel-databases',
+      items: [
+        { name: 'MongoDB', slug: 'mongodb', showLabel: true },
+        { name: 'PostgreSQL', slug: 'postgresql', showLabel: true }
+      ]
+    },
+    {
+      id: 'frontend',
+      label: 'Front End Technologies',
+      gridClass: 'panel-frontend',
+      items: [
+        { name: 'React.js', slug: 'react' },
+        { name: 'Tailwind CSS', slug: 'tailwindcss' },
+        { name: 'REST APIs', customIcon: restApiIcon, showLabel: true }
+      ]
+    },
+    {
+      id: 'cloud',
+      label: 'Cloud',
+      gridClass: 'panel-cloud',
+      items: [
+        { name: 'AWS', slug: 'amazonwebservices' }
+      ]
+    },
+    {
+      id: 'qa',
+      label: 'QA and Automation',
+      gridClass: 'panel-qa',
+      items: [
+        { name: 'Git', slug: 'git' },
+        { name: 'Linux', slug: 'linux' }
+      ]
+    },
+    {
+      id: 'devops',
+      label: 'DevOps Tools',
+      gridClass: 'panel-devops',
+      items: [
+        { name: 'Jenkins', slug: 'jenkins' },
+        { name: 'Docker', slug: 'docker' },
+        { name: 'Kubernetes', slug: 'kubernetes' }
+      ]
+    }
   ];
 
   const renderIcon = (item: TechItem) => {
@@ -74,7 +130,7 @@ const Technologies: React.FC = () => {
       <svg
         viewBox="0 0 24 24"
         className="w-10 h-10"
-        fill={item.color}
+        fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path d={path} />
@@ -87,43 +143,22 @@ const Technologies: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.04
+        staggerChildren: 0.08
       }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
+        duration: 0.5,
         ease: 'easeOut'
       }
     }
   };
-
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [cols, setCols] = useState(4);
-
-  useEffect(() => {
-    const updateCols = () => {
-      // The CSS file only has xl:grid-cols-5, not lg:grid-cols-5
-      if (window.matchMedia('(min-width: 1280px)').matches) setCols(5);
-      else if (window.matchMedia('(min-width: 768px)').matches) setCols(4);
-      else if (window.matchMedia('(min-width: 640px)').matches) setCols(3);
-      else setCols(2);
-    };
-    
-    updateCols();
-    window.addEventListener('resize', updateCols);
-    return () => window.removeEventListener('resize', updateCols);
-  }, []);
-
-  const visibleCount = cols * 2;
-  const showButton = techItems.length > visibleCount;
-  const visibleItems = isExpanded ? techItems : techItems.slice(0, visibleCount);
 
   return (
     <section id="technologies" className="section bg-dark overflow-hidden">
@@ -136,64 +171,48 @@ const Technologies: React.FC = () => {
           viewport={{ once: true }}
         >
           <div className="badge">Technologies</div>
-          <h2 className="text-h2 font-bold uppercase">
-            Technologies We <span className="gradient-text">Master</span>
+          <h2 className="tech-stack-title text-h2 font-bold">
+            Tech stack
           </h2>
           <p className="text-lg text-text-light max-w-4xl">
             We build state-of-the-art applications using industry-leading technologies, frameworks, and modern tools to ensure robust and scalable solutions.
           </p>
         </motion.div>
 
-        {/* Responsive Grid Layout */}
+        {/* Bento Grid Layout */}
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6 mt-10"
+          className="tech-stack-grid mt-10"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          layout
         >
-          <AnimatePresence mode="popLayout">
-            {visibleItems.map((item) => (
-              <motion.div
-                key={item.name}
-                layout
-                variants={itemVariants}
-                className="card gradient-border bg-secondary/30 p-5 flex flex-col items-center justify-center text-center w-full gap-y-3"
-                whileHover={{
-                  scale: 1.05,
-                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                  borderColor: 'rgba(59, 130, 246, 0.5)'
-                }}
-              >
-                <div className="h-12 flex items-center justify-center">
-                  {renderIcon(item)}
-                </div>
-                <div className="flex flex-col items-center gap-y-1">
-                  <span className="text-white font-bold text-sm tracking-wider uppercase">{item.name}</span>
-                  <span className="text-[10px] text-text-light/60 font-semibold tracking-widest uppercase">{item.category}</span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        {showButton && (
-          <motion.div 
-            className="flex justify-center mt-12"
-            layout
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="btn btn-primary"
+          {techCategories.map((category) => (
+            <motion.div
+              key={category.id}
+              variants={itemVariants}
+              className={`tech-panel ${category.gridClass}`}
+              role="region"
+              aria-label={category.label}
             >
-              {isExpanded ? 'Show Less' : 'Load More'}
-            </button>
-          </motion.div>
-        )}
+              <span className="tech-category-label">{category.label}</span>
+              <div className="tech-logo-row">
+                {category.items.map((item) => (
+                  <div key={item.name} className="tech-logo-item" title={item.name}>
+                    {item.showLabel ? (
+                      <div className="tech-logo-with-text">
+                        {renderIcon(item)}
+                        <span className="tech-logo-text">{item.name}</span>
+                      </div>
+                    ) : (
+                      renderIcon(item)
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

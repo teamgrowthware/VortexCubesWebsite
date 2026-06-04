@@ -1,4 +1,5 @@
 /* Responsive Design Fixes for Neonspark Website */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /* Keep this in sync with the fixed header height (approx). */
 :root {
@@ -1290,6 +1291,141 @@ img {
 @supports (color:color-mix(in lab, red, red)) {
   .hover\:border-white\/10:hover {
     border-color: color-mix(in oklab, var(--color-white, #fff) 10%, transparent) !important;
+  }
+}
+
+/* === Technologies Section Redesign === */
+
+.tech-stack-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  text-transform: none !important;
+  color: #ffffff;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.tech-stack-grid {
+  display: grid;
+  background-color: rgba(255, 255, 255, 0.1);
+  gap: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.tech-panel {
+  background-color: #0a0a0a;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1.5rem 2.5rem 1.5rem;
+  transition: background-color 0.3s ease;
+  min-height: 160px;
+}
+
+.tech-panel:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tech-category-label {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #F97316;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.tech-logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem 2.5rem;
+  width: 100%;
+}
+
+.tech-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.65);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 48px;
+  text-decoration: none;
+}
+
+.tech-logo-item svg {
+  fill: currentColor;
+  color: inherit;
+  transition: color 0.3s ease;
+  max-height: 38px;
+  width: auto;
+  max-width: 110px;
+}
+
+.tech-logo-item:hover {
+  color: #ffffff;
+  transform: scale(1.06);
+}
+
+.tech-logo-with-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tech-logo-text {
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: inherit;
+}
+
+@media (min-width: 1024px) {
+  .tech-stack-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .panel-biz-app { grid-column: span 7; }
+  .panel-data-ai { grid-column: span 5; }
+  .panel-databases { grid-column: span 3; }
+  .panel-frontend { grid-column: span 6; }
+  .panel-cloud { grid-column: span 3; }
+  .panel-qa { grid-column: span 6; }
+  .panel-devops { grid-column: span 6; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tech-stack-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .panel-biz-app { grid-column: span 2; }
+  .panel-data-ai { grid-column: span 1; }
+  .panel-databases { grid-column: span 1; }
+  .panel-frontend { grid-column: span 2; }
+  .panel-cloud { grid-column: span 1; }
+  .panel-qa { grid-column: span 1; }
+  .panel-devops { grid-column: span 2; }
+}
+
+@media (max-width: 767px) {
+  .tech-stack-grid {
+    grid-template-columns: 1fr;
+  }
+  .tech-panel {
+    grid-column: span 1;
+    padding: 3rem 1.25rem 2rem 1.25rem;
+    min-height: auto;
+  }
+  .tech-logo-row {
+    gap: 1.25rem 2rem;
   }
 }
 

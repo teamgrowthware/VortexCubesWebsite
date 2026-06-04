@@ -1,6 +1,7 @@
 import './complete-styles.css';
 import './animations.css';
 import './responsive-fixes.css';
+import './admin.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { PageRouter } from './sitePages';
@@ -15,7 +16,7 @@ function App() {
     <ProjectModalProvider>
       <div className="App w-full">
         {!isAdminRoute && <Header />}
-        <main className="w-full page-content">
+        <main className={`w-full page-content ${isAdminRoute ? 'admin-page-content' : ''}`}>
           <PageRouter pathname={pathname} />
         </main>
         {!isAdminRoute && <Footer />}

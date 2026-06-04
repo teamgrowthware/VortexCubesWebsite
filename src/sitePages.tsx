@@ -1379,13 +1379,12 @@ function FaqPage() {
 }
 
 const TECH_STACK_OPTIONS = [
-  'MERN Stack',
+  'UI/UX',
   'Full Stack',
-  'AI/ML',
-  'Frontend Development',
-  'Backend Development',
-  'DevOps',
-  'Mobile Development',
+  'React Developer',
+  'QA Engineer',
+  'React Native Developer',
+  'Project Manager',
 ];
 
 const AVAILABILITY_OPTIONS = ['Immediate', 'Within 1 week', 'Within 2 weeks'];
@@ -1906,79 +1905,89 @@ function AdminAuthPage({ mode }: { mode: 'login' | 'signup' }) {
   }
 
   return (
-    <section className="section bg-dark min-h-screen flex items-center">
-      <div className="container">
-        <div className="max-w-md mx-auto card gradient-border bg-secondary/50 p-8">
-          <div className="text-center mb-8">
-            <div className="badge mb-4">{isSignup ? 'Create Admin' : 'Admin Access'}</div>
-            <h1 className="text-3xl font-bold text-white">{isSignup ? 'Signup' : 'Login'}</h1>
+    <section className="admin-auth-section">
+      <div className="admin-auth-container">
+        <div className="admin-card auth-card">
+          <div className="admin-card-header">
+            <div className="admin-badge">{isSignup ? 'Create Admin' : 'Admin Access'}</div>
+            <h1 className="admin-title">{isSignup ? 'Signup' : 'Login'}</h1>
+            <p className="admin-subtitle">Access the Vortex Cubes admin panel</p>
           </div>
 
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <form className="admin-form" onSubmit={handleSubmit}>
             {isSignup ? (
-              <label className="flex flex-col gap-2 text-sm text-text-light">
-                Name
+              <div className="admin-field">
+                <label className="admin-label">Name</label>
                 <input
-                  className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                  className="admin-input"
+                  placeholder="Enter your name"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   required
                 />
-              </label>
+              </div>
             ) : null}
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Email
+            <div className="admin-field">
+              <label className="admin-label">Email</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
                 type="email"
+                placeholder="Enter your email address"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Password
+            <div className="admin-field">
+              <label className="admin-label">Password</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 minLength={8}
                 required
               />
-            </label>
+            </div>
 
             {isSignup ? (
-              <label className="flex flex-col gap-2 text-sm text-text-light">
-                Confirm Password
+              <div className="admin-field">
+                <label className="admin-label">Confirm Password</label>
                 <input
-                  className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                  className="admin-input"
                   type="password"
+                  placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
                   minLength={8}
                   required
                 />
-              </label>
+              </div>
             ) : null}
 
-            {error ? <p className="text-sm text-red-400">{error}</p> : null}
+            {error ? (
+              <div className="admin-error-banner">
+                <span className="error-icon">⚠️</span>
+                <p className="error-text">{error}</p>
+              </div>
+            ) : null}
 
-            <button className="btn btn-primary mt-2" type="submit" disabled={isSubmitting}>
+            <button className="admin-btn-primary" type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Please wait...' : isSignup ? 'Create Account' : 'Login'}
             </button>
           </form>
 
-          <div className="text-center mt-6 text-sm text-text-light">
+          <div className="admin-footer-link">
             {isSignup ? (
-              <a className="text-blue-400 hover:text-white" href="/admin/login">
-                Already have an account? Login
+              <a href="/admin/login">
+                Already have an account? <span>Login</span>
               </a>
             ) : (
-              <a className="text-blue-400 hover:text-white" href="/admin/signup">
-                Need an admin account? Signup
+              <a href="/admin/signup">
+                Need an admin account? <span>Signup</span>
               </a>
             )}
           </div>
@@ -2111,76 +2120,81 @@ function AdminBenchResourcesPage() {
   }
 
   return (
-    <section className="section bg-dark min-h-screen">
-      <div className="container">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <section className="admin-dashboard-section">
+      <div className="admin-dashboard-container">
+        {/* Top Header Block */}
+        <div className="admin-header-row">
           <div>
-            <div className="badge mb-4">Admin Panel</div>
-            <h1 className="text-4xl font-bold text-white">Bench Resources</h1>
+            <div className="admin-badge">Admin Panel</div>
+            <h1 className="admin-dashboard-title">Bench Resources</h1>
           </div>
-          <button className="btn" type="button" onClick={handleLogout}>
+          <button className="admin-btn-secondary" type="button" onClick={handleLogout}>
             Logout
           </button>
         </div>
 
-        <form className="card gradient-border bg-secondary/50 p-6 mb-10" onSubmit={handleSubmit}>
-          <div className="flex items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold text-white">{editingId ? 'Update Resource' : 'Add Resource'}</h2>
+        {/* Form to Add/Edit Resource */}
+        <form className="admin-card form-card" onSubmit={handleSubmit}>
+          <div className="form-card-header">
+            <h2 className="form-card-title">{editingId ? 'Update Resource' : 'Add Resource'}</h2>
             {editingId ? (
-              <button className="btn text-sm" type="button" onClick={resetForm}>
+              <button className="admin-btn-secondary btn-sm" type="button" onClick={resetForm}>
                 Cancel Edit
               </button>
             ) : null}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Name
+          <div className="admin-form-grid">
+            <div className="admin-field">
+              <label className="admin-label">Name</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
+                placeholder="Candidate Full Name"
                 value={formData.name}
                 onChange={(event) => updateField('name', event.target.value)}
                 required
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Role
+            <div className="admin-field">
+              <label className="admin-label">Role</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
+                placeholder="e.g. Senior React Developer"
                 value={formData.role}
                 onChange={(event) => updateField('role', event.target.value)}
                 required
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Experience
+            <div className="admin-field">
+              <label className="admin-label">Experience (Years)</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
                 type="number"
                 min="0"
+                placeholder="5"
                 value={formData.experience}
                 onChange={(event) => updateField('experience', Number(event.target.value))}
                 required
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Hourly Rate
+            <div className="admin-field">
+              <label className="admin-label">Hourly Rate</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
-                placeholder="$75/hr"
+                className="admin-input"
+                placeholder="e.g. $75/hr"
                 value={formData.chargePerHour}
                 onChange={(event) => updateField('chargePerHour', event.target.value)}
                 required
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Availability
+            <div className="admin-field">
+              <label className="admin-label">Availability</label>
               <select
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-select"
                 value={formData.availability}
                 onChange={(event) => updateField('availability', event.target.value)}
               >
@@ -2190,31 +2204,29 @@ function AdminBenchResourcesPage() {
                   </option>
                 ))}
               </select>
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-2 text-sm text-text-light">
-              Sort Order
+            <div className="admin-field">
+              <label className="admin-label">Sort Order</label>
               <input
-                className="bg-dark/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500"
+                className="admin-input"
                 type="number"
+                placeholder="0"
                 value={formData.sortOrder}
                 onChange={(event) => updateField('sortOrder', Number(event.target.value))}
               />
-            </label>
+            </div>
           </div>
 
-          <div className="mt-5">
-            <span className="text-sm text-text-light block mb-3">Tech Stack</span>
-            <div className="flex flex-wrap gap-2">
+          <div className="admin-tech-stack-section">
+            <span className="admin-label block-label">Tech Stack</span>
+            <div className="tech-tags-grid">
               {TECH_STACK_OPTIONS.map((tech) => (
                 <button
                   key={tech}
                   type="button"
                   onClick={() => toggleTechStack(tech)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${formData.techStack.includes(tech)
-                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                      : 'bg-dark/40 text-text-light hover:text-white border border-white/5 hover:border-white/10'
-                    }`}
+                  className={`tech-tag-btn ${formData.techStack.includes(tech) ? 'active' : ''}`}
                 >
                   {tech}
                 </button>
@@ -2222,66 +2234,81 @@ function AdminBenchResourcesPage() {
             </div>
           </div>
 
-          <label className="flex items-center gap-3 mt-5 text-sm text-text-light">
+          <label className="admin-checkbox-label">
             <input
               type="checkbox"
+              className="admin-checkbox"
               checked={formData.isActive}
               onChange={(event) => updateField('isActive', event.target.checked)}
             />
-            Active on public Bench Resources page
+            <span>Active on public Bench Resources page</span>
           </label>
 
-          {error ? <p className="text-sm text-red-400 mt-4">{error}</p> : null}
+          {error ? (
+            <div className="admin-error-banner">
+              <span className="error-icon">⚠️</span>
+              <p className="error-text">{error}</p>
+            </div>
+          ) : null}
 
-          <button className="btn btn-primary mt-6" type="submit" disabled={isSaving}>
+          <button className="admin-btn-primary form-submit-btn" type="submit" disabled={isSaving}>
             {isSaving ? 'Saving...' : editingId ? 'Update Resource' : 'Add Resource'}
           </button>
         </form>
 
-        <div className="card gradient-border bg-secondary/50 overflow-hidden">
-          <div className="p-6 border-b border-white/10">
-            <h2 className="text-2xl font-bold text-white">Resources List</h2>
+        {/* Resources Table Section */}
+        <div className="admin-card table-card">
+          <div className="table-card-header">
+            <h2 className="form-card-title">Resources List</h2>
           </div>
 
           {isLoading ? (
-            <div className="p-6 text-text-light">Loading resources...</div>
+            <div className="table-loading">Loading resources...</div>
           ) : resources.length === 0 ? (
-            <div className="p-6 text-text-light">No bench resources have been added yet.</div>
+            <div className="table-empty">No bench resources have been added yet.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="bg-dark/40 text-text-light text-xs uppercase">
+            <div className="admin-table-wrapper">
+              <table className="admin-table">
+                <thead>
                   <tr>
-                    <th className="px-4 py-3">Name</th>
-                    <th className="px-4 py-3">Role</th>
-                    <th className="px-4 py-3">Exp</th>
-                    <th className="px-4 py-3">Tech Stack</th>
-                    <th className="px-4 py-3">Rate</th>
-                    <th className="px-4 py-3">Availability</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Actions</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Exp</th>
+                    <th>Tech Stack</th>
+                    <th>Rate</th>
+                    <th>Availability</th>
+                    <th>Sort</th>
+                    <th>Status</th>
+                    <th className="actions-header">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {resources.map((resource) => (
-                    <tr key={resource._id || resource.name} className="border-t border-white/5">
-                      <td className="px-4 py-4 text-white font-semibold">{resource.name}</td>
-                      <td className="px-4 py-4 text-text-light">{resource.role}</td>
-                      <td className="px-4 py-4 text-text-light">{resource.experience}</td>
-                      <td className="px-4 py-4 text-text-light">{resource.techStack.join(', ')}</td>
-                      <td className="px-4 py-4 text-text-light">{resource.chargePerHour}</td>
-                      <td className="px-4 py-4 text-text-light">{resource.availability}</td>
-                      <td className="px-4 py-4">
-                        <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${resource.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                    <tr key={resource._id || resource.name}>
+                      <td className="candidate-name-cell">{resource.name}</td>
+                      <td>{resource.role}</td>
+                      <td>{resource.experience} yrs</td>
+                      <td className="tech-stack-cell">
+                        <div className="tech-pills">
+                          {resource.techStack.map((tech) => (
+                            <span key={tech} className="tech-pill">{tech}</span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="rate-cell">{resource.chargePerHour}</td>
+                      <td>{resource.availability}</td>
+                      <td>{resource.sortOrder}</td>
+                      <td>
+                        <span className={`status-badge ${resource.isActive ? 'active' : 'hidden'}`}>
                           {resource.isActive ? 'Active' : 'Hidden'}
                         </span>
                       </td>
-                      <td className="px-4 py-4">
-                        <div className="flex gap-2">
-                          <button className="btn text-xs px-3 py-2" type="button" onClick={() => startEdit(resource)}>
+                      <td className="actions-cell">
+                        <div className="action-buttons">
+                          <button className="action-btn-edit" type="button" onClick={() => startEdit(resource)}>
                             Edit
                           </button>
-                          <button className="btn text-xs px-3 py-2" type="button" onClick={() => setDeleteTarget(resource)}>
+                          <button className="action-btn-delete" type="button" onClick={() => setDeleteTarget(resource)}>
                             Delete
                           </button>
                         </div>
@@ -2295,19 +2322,19 @@ function AdminBenchResourcesPage() {
         </div>
       </div>
 
+      {/* Delete Confirmation Modal */}
       {deleteTarget ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={() => setDeleteTarget(null)} />
-          <div className="card gradient-border bg-dark max-w-md w-full relative z-10 p-6">
-            <h2 className="text-2xl font-bold text-white mb-3">Delete Resource</h2>
-            <p className="text-text-light mb-6">
-              Delete {deleteTarget.name}? This removes the resource from the admin panel and public Bench Resources page.
+        <div className="admin-modal-overlay">
+          <div className="admin-modal-card">
+            <h2 className="admin-modal-title">Delete Resource</h2>
+            <p className="admin-modal-text">
+              Are you sure you want to delete <strong>{deleteTarget.name}</strong>? This action will remove the candidate from both the admin dashboard and public bench resources directory.
             </p>
-            <div className="flex gap-3">
-              <button className="btn flex-1" type="button" onClick={() => setDeleteTarget(null)}>
+            <div className="admin-modal-actions">
+              <button className="admin-modal-btn-cancel" type="button" onClick={() => setDeleteTarget(null)}>
                 Cancel
               </button>
-              <button className="btn btn-primary flex-1" type="button" onClick={confirmDelete}>
+              <button className="admin-modal-btn-delete" type="button" onClick={confirmDelete}>
                 Delete
               </button>
             </div>
