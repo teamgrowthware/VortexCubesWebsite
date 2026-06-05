@@ -5,7 +5,7 @@ export interface BenchResource {
   role: string;
   experience: number;
   techStack: string[];
-  chargePerHour: string;
+  monthlyRate: string;
   availability: string;
   isActive?: boolean;
   sortOrder?: number;
@@ -18,7 +18,7 @@ export type BenchResourcePayload = {
   role: string;
   experience: number;
   techStack: string[];
-  chargePerHour: string;
+  monthlyRate: string;
   availability: string;
   isActive: boolean;
   sortOrder: number;

@@ -1301,46 +1301,57 @@ img {
   text-transform: none !important;
   color: #ffffff;
   font-weight: 300;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .tech-stack-grid {
   display: grid;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.07);
   gap: 1px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .tech-panel {
-  background-color: #0a0a0a;
+  background-color: #08080a;
+  background-image: radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.012) 0%, transparent 80%);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3.5rem 1.5rem 2.5rem 1.5rem;
-  transition: background-color 0.3s ease;
-  min-height: 160px;
+  padding: 4rem 2rem 3rem 2rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 170px;
 }
 
 .tech-panel:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: #0a0a0d;
+  background-image: radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
 }
 
 .tech-category-label {
   position: absolute;
-  top: 1.25rem;
+  top: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
   color: #F97316;
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
   text-align: center;
-  opacity: 0.85;
+  opacity: 0.75;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tech-panel:hover .tech-category-label {
+  color: #fb923c;
+  opacity: 1;
+  letter-spacing: 0.22em;
 }
 
 .tech-logo-row {
@@ -1348,7 +1359,7 @@ img {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem 2.5rem;
+  gap: 1.75rem 3rem;
   width: 100%;
 }
 
@@ -1356,8 +1367,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.65);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgba(255, 255, 255, 0.55);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   height: 48px;
   text-decoration: none;
 }
@@ -1366,26 +1377,36 @@ img {
   fill: currentColor;
   color: inherit;
   transition: color 0.3s ease;
-  max-height: 38px;
+  max-height: 34px;
   width: auto;
   max-width: 110px;
 }
 
+.tech-logo-item img {
+  height: 34px;
+  width: auto;
+  max-width: 110px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+
 .tech-logo-item:hover {
   color: #ffffff;
-  transform: scale(1.06);
+  transform: translateY(-2px) scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.12));
 }
 
 .tech-logo-with-text {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .tech-logo-text {
   font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
   color: inherit;
 }
 
@@ -1421,11 +1442,11 @@ img {
   }
   .tech-panel {
     grid-column: span 1;
-    padding: 3rem 1.25rem 2rem 1.25rem;
+    padding: 3.5rem 1.5rem 2.5rem 1.5rem;
     min-height: auto;
   }
   .tech-logo-row {
-    gap: 1.25rem 2rem;
+    gap: 1.5rem 2.25rem;
   }
 }
 

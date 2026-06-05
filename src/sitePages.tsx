@@ -1394,7 +1394,7 @@ const emptyBenchResourceForm: BenchResourcePayload = {
   role: '',
   experience: 0,
   techStack: [],
-  chargePerHour: '',
+  monthlyRate: '',
   availability: 'Immediate',
   isActive: true,
   sortOrder: 0,
@@ -1754,9 +1754,9 @@ export function BenchResourcesPage() {
                 </div>
                 <div>
                   <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                    HOURLY RATE
+                    MONTHLY RATE
                   </span>
-                  <span className="text-white text-base font-semibold">{activeModalMember.chargePerHour}</span>
+                  <span className="text-white text-base font-semibold">{activeModalMember.monthlyRate}</span>
                 </div>
               </div>
 
@@ -2064,7 +2064,7 @@ function AdminBenchResourcesPage() {
       role: resource.role,
       experience: resource.experience,
       techStack: resource.techStack,
-      chargePerHour: resource.chargePerHour,
+      monthlyRate: resource.monthlyRate,
       availability: resource.availability,
       isActive: resource.isActive ?? true,
       sortOrder: resource.sortOrder ?? 0,
@@ -2181,12 +2181,12 @@ function AdminBenchResourcesPage() {
             </div>
 
             <div className="admin-field">
-              <label className="admin-label">Hourly Rate</label>
+              <label className="admin-label">Monthly Rate</label>
               <input
                 className="admin-input"
-                placeholder="e.g. $75/hr"
-                value={formData.chargePerHour}
-                onChange={(event) => updateField('chargePerHour', event.target.value)}
+                placeholder="e.g. Rs. 75,000 – Rs. 1,25,000"
+                value={formData.monthlyRate}
+                onChange={(event) => updateField('monthlyRate', event.target.value)}
                 required
               />
             </div>
@@ -2295,7 +2295,7 @@ function AdminBenchResourcesPage() {
                           ))}
                         </div>
                       </td>
-                      <td className="rate-cell">{resource.chargePerHour}</td>
+                      <td className="rate-cell">{resource.monthlyRate}</td>
                       <td>{resource.availability}</td>
                       <td>{resource.sortOrder}</td>
                       <td>
