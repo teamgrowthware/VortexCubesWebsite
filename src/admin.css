@@ -531,13 +531,26 @@
 .admin-modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
-  z-index: 1000;
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: admin-fade-in 0.2s ease both;
+}
+
+@keyframes admin-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .admin-modal-card {
@@ -548,13 +561,15 @@
   max-width: 440px;
   width: 100%;
   box-shadow: var(--admin-shadow);
+  margin: auto;
+  position: relative;
   animation: admin-modal-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes admin-modal-pop {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(10px);
+    transform: scale(0.96) translateY(8px);
   }
   to {
     opacity: 1;
@@ -595,6 +610,10 @@
   transition: all 0.2s;
   border: none;
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .admin-modal-btn-cancel {
@@ -616,6 +635,35 @@
 .admin-modal-btn-delete:hover {
   background-color: #dc2626;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.admin-modal-btn-cancel:focus-visible,
+.admin-modal-btn-delete:focus-visible {
+  outline: 2px solid var(--admin-accent);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments for the admin modal */
+@media (max-width: 768px) {
+  .admin-modal-card {
+    padding: 24px;
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-modal-card {
+    padding: 20px;
+  }
+  .admin-modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-modal-btn-cancel,
+  .admin-modal-btn-delete {
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 /* 5. Mobile & Tablet Responsive Adaptations */

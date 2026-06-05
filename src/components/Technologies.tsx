@@ -32,6 +32,33 @@ const Technologies: React.FC = () => {
     </svg>
   );
 
+  const llmIcon = (
+    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <defs>
+        <linearGradient id="llmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#10B981" />
+          <stop offset="100%" stopColor="#3B82F6" />
+        </linearGradient>
+      </defs>
+      <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.12 3 3 0 0 1 0-4.88 2.5 2.5 0 0 1 0-3.12A2.5 2.5 0 0 1 9.5 2Z" stroke="url(#llmGrad)" />
+      <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.12 3 3 0 0 0 0-4.88 2.5 2.5 0 0 0 0-3.12A2.5 2.5 0 0 0 14.5 2Z" stroke="url(#llmGrad)" />
+    </svg>
+  );
+
+  const lmsIcon = (
+    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <defs>
+        <linearGradient id="lmsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#F59E0B" />
+          <stop offset="100%" stopColor="#EF4444" />
+        </linearGradient>
+      </defs>
+      <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" stroke="url(#lmsGrad)" />
+      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" stroke="url(#lmsGrad)" />
+      <path d="M21.5 12v6" stroke="url(#lmsGrad)" />
+    </svg>
+  );
+
   const techCategories: TechCategory[] = [
     {
       id: 'biz-app',
@@ -63,14 +90,24 @@ const Technologies: React.FC = () => {
       gridClass: 'panel-databases',
       items: [
         { name: 'MongoDB', slug: 'mongodb', showLabel: true },
-        { name: 'PostgreSQL', slug: 'postgresql', showLabel: true }
+        { name: 'PostgreSQL', slug: 'postgresql', showLabel: true },
+        { name: 'MySQL', slug: 'mysql' },
+        { name: 'Oracle', slug: 'oracle' }
       ]
     },
     {
       id: 'frontend',
-      label: 'Interperior SaaS & ERP',
+      label: 'Enterprise SaaS and ERP',
       gridClass: 'panel-frontend',
-      items: []
+      items: [
+        { name: 'Odoo', slug: 'odoo' },
+        { name: 'Sanity', slug: 'sanity' },
+        { name: 'Zoho', slug: 'zoho' },
+        { name: 'MuleSoft', slug: 'mulesoft' },
+        { name: 'Solana', slug: 'solana' },
+        { name: 'LLM', customIcon: llmIcon, showLabel: true },
+        { name: 'LMS', customIcon: lmsIcon, showLabel: true }
+      ]
     },
     {
       id: 'cloud',
@@ -88,13 +125,22 @@ const Technologies: React.FC = () => {
       id: 'qa',
       label: 'UI/UX & Graphics',
       gridClass: 'panel-qa',
-      items: []
+      items: [
+        { name: 'Figma', slug: 'figma' },
+        { name: 'Sketch', slug: 'sketch' },
+        { name: 'Stitch', slug: 'stitch' }
+      ]
     },
     {
       id: 'devops',
       label: 'Digital & Social Media',
       gridClass: 'panel-devops',
-      items: []
+      items: [
+        { name: 'LinkedIn', slug: 'linkedin' },
+        { name: 'Instagram', slug: 'instagram' },
+        { name: 'Facebook', slug: 'facebook' },
+        { name: 'Twitter', slug: 'twitter' }
+      ]
     }
   ];
 

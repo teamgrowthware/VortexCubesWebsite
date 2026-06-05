@@ -1,4 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import Projects from './components/Projects';
@@ -1900,18 +1901,20 @@ export function BenchResourcesPage() {
             .bench-modal-container {
               display: flex;
               justify-content: center;
-              align-items: center;
+              align-items: flex-start;
               position: fixed;
               inset: 0;
-              z-index: 1000;
-              padding: 24px;
+              z-index: 10000;
+              padding: 40px 16px;
+              overflow-y: auto;
             }
             .bench-modal-backdrop {
-              position: absolute;
+              position: fixed;
               inset: 0;
               background: rgba(0, 0, 0, 0.75);
               backdrop-filter: blur(10px);
               -webkit-backdrop-filter: blur(10px);
+              z-index: 9999;
             }
             .bench-modal-card {
               position: relative;
@@ -1922,9 +1925,20 @@ export function BenchResourcesPage() {
               max-width: 480px;
               padding: 32px;
               box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(59, 130, 246, 0.05);
-              z-index: 1010;
+              z-index: 10010;
               text-align: left !important;
               margin: auto;
+              animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+            @keyframes scaleUp {
+              from {
+                transform: scale(0.95);
+                opacity: 0;
+              }
+              to {
+                transform: scale(1);
+                opacity: 1;
+              }
             }
             .bench-modal-close {
               position: absolute;
@@ -1942,6 +1956,7 @@ export function BenchResourcesPage() {
               cursor: pointer;
               transition: all 0.3s ease;
               font-size: 13px;
+              z-index: 10;
             }
             .bench-modal-close:hover {
               background: rgba(255, 255, 255, 0.08);
@@ -1952,6 +1967,7 @@ export function BenchResourcesPage() {
               margin-bottom: 24px;
               padding-bottom: 16px;
               border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+              padding-right: 40px;
             }
             .bench-modal-badge {
               display: inline-block;
@@ -2032,6 +2048,25 @@ export function BenchResourcesPage() {
             .bench-modal-btn-primary:hover {
               transform: translateY(-2px);
               box-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);
+            }
+            
+            @media (max-width: 480px) {
+              .bench-modal-card {
+                padding: 24px 20px;
+                border-radius: 20px;
+              }
+              .bench-modal-close {
+                top: 16px;
+                right: 16px;
+              }
+              .bench-modal-actions {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 24px;
+              }
+              .bench-modal-btn {
+                width: 100%;
+              }
             }
           `}</style>
 
@@ -2180,7 +2215,7 @@ export function BenchResourcesPage() {
       </section>
 
       {/* Modal Popup Details */}
-      {activeModalMember && (
+      {activeModalMember && createPortal(
         <div className="bench-modal-container animate-fade-in">
           {/* Backdrop */}
           <div
@@ -2257,7 +2292,8 @@ export function BenchResourcesPage() {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
@@ -2720,9 +2756,9 @@ function AdminBenchResourcesPage() {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {deleteTarget ? (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal-card">
+      {deleteTarget ? createPortal(
+        <div className="admin-modal-overlay" onClick={() => setDeleteTarget(null)}>
+          <div className="admin-modal-card" onClick={(e) => e.stopPropagation()}>
             <h2 className="admin-modal-title">Delete Resource</h2>
             <p className="admin-modal-text">
               Are you sure you want to delete <strong>{deleteTarget.role}</strong>? This action will remove the candidate from both the admin dashboard and public bench resources directory.
@@ -2736,7 +2772,8 @@ function AdminBenchResourcesPage() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       ) : null}
     </section>
   );
