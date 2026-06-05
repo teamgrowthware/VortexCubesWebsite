@@ -1390,7 +1390,6 @@ const TECH_STACK_OPTIONS = [
 const AVAILABILITY_OPTIONS = ['Immediate', 'Within 1 week', 'Within 2 weeks'];
 
 const emptyBenchResourceForm: BenchResourcePayload = {
-  name: '',
   role: '',
   experience: 0,
   techStack: [],
@@ -1410,6 +1409,8 @@ export function BenchResourcesPage() {
   const [selectedExperience, setSelectedExperience] = useState<string>('All Experience');
   const [isExperienceFilterOpen, setIsExperienceFilterOpen] = useState<boolean>(false);
   const [activeModalMember, setActiveModalMember] = useState<BenchResource | null>(null);
+
+  const experienceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -1452,6 +1453,18 @@ export function BenchResourcesPage() {
     };
   }, [activeModalMember]);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (experienceRef.current && !experienceRef.current.contains(event.target as Node)) {
+        setIsExperienceFilterOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const techStackList = ['All', ...TECH_STACK_OPTIONS];
 
   const filteredMembers = benchMembers.filter((member) => {
@@ -1485,55 +1498,575 @@ export function BenchResourcesPage() {
             description="Use the filters below to find the right expertise for your project requirements."
           />
 
+          {/* Scoped CSS Styles for Bench Resources Layout and Cards */}
+          <style>{`
+            .tech-scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+            .tech-scrollbar-hide {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+            .mask-edges {
+              mask-image: linear-gradient(to right, black 95%, transparent 100%);
+              -webkit-mask-image: linear-gradient(to right, black 95%, transparent 100%);
+            }
+            
+            /* Custom Bench Styles */
+            .bench-filter-container {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              width: 100%;
+            }
+
+            .bench-filter-wrapper {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              align-items: stretch;
+              gap: 16px;
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              background: rgba(26, 26, 26, 0.25);
+              backdrop-filter: blur(8px);
+              -webkit-backdrop-filter: blur(8px);
+              padding: 16px;
+              border-radius: 16px;
+              width: 100%;
+              z-index: 10;
+              position: relative;
+            }
+
+            @media (min-width: 768px) {
+              .bench-filter-wrapper {
+                flex-direction: row;
+                align-items: center;
+              }
+            }
+
+            .bench-tech-list {
+              display: flex;
+              gap: 8px;
+              align-items: center;
+              overflow-x: auto;
+              padding-bottom: 4px;
+              width: 100%;
+            }
+
+            .bench-filter-btn {
+              white-space: nowrap;
+              flex-shrink: 0;
+              padding: 8px 16px;
+              border-radius: 12px;
+              font-size: 13.5px;
+              font-weight: 600;
+              transition: all 0.3s ease;
+              border: 1px solid rgba(255, 255, 255, 0.05);
+              background: rgba(10, 10, 10, 0.4);
+              color: rgba(255, 255, 255, 0.6);
+              cursor: pointer;
+            }
+
+            .bench-filter-btn:hover {
+              color: #ffffff;
+              border-color: rgba(255, 255, 255, 0.15);
+              background: rgba(255, 255, 255, 0.05);
+            }
+
+            .bench-filter-btn.active {
+              background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+              color: #ffffff;
+              border-color: transparent;
+              box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+            }
+
+            .bench-exp-dropdown-wrapper {
+              position: relative;
+              flex-shrink: 0;
+              z-index: 20;
+            }
+
+            .bench-exp-dropdown-btn {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 8px;
+              padding: 10px 20px;
+              border-radius: 12px;
+              font-size: 13.5px;
+              font-weight: 600;
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              background: rgba(10, 10, 10, 0.4);
+              color: rgba(255, 255, 255, 0.6);
+              transition: all 0.3s ease;
+              cursor: pointer;
+              width: 100%;
+            }
+
+            @media (min-width: 768px) {
+              .bench-exp-dropdown-btn {
+                width: auto;
+              }
+            }
+
+            .bench-exp-dropdown-btn:hover {
+              color: #ffffff;
+              border-color: rgba(255, 255, 255, 0.15);
+            }
+
+            .bench-exp-dropdown-btn.active {
+              background: rgba(59, 130, 246, 0.08);
+              border-color: #3b82f6;
+              color: #ffffff;
+            }
+
+            .bench-exp-badge {
+              background: #3b82f6;
+              color: #ffffff;
+              font-size: 10px;
+              padding: 2px 6px;
+              border-radius: 6px;
+              font-weight: 700;
+            }
+
+            .bench-exp-dropdown-menu {
+              position: absolute;
+              right: 0;
+              left: 0;
+              margin-top: 8px;
+              border-radius: 12px;
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              background: #111216;
+              box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+              overflow: hidden;
+              z-index: 50;
+              display: flex;
+              flex-direction: column;
+              padding: 4px 0;
+            }
+
+            @media (min-width: 768px) {
+              .bench-exp-dropdown-menu {
+                left: auto;
+                width: 190px;
+              }
+            }
+
+            .bench-exp-dropdown-item {
+              padding: 10px 16px;
+              font-size: 13.5px;
+              font-weight: 600;
+              text-align: left;
+              background: transparent;
+              color: rgba(255, 255, 255, 0.6);
+              border: none;
+              cursor: pointer;
+              transition: all 0.2s ease;
+            }
+
+            .bench-exp-dropdown-item:hover {
+              background: rgba(255, 255, 255, 0.05);
+              color: #ffffff;
+            }
+
+            .bench-exp-dropdown-item.active {
+              background: rgba(59, 130, 246, 0.1);
+              color: #60a5fa;
+            }
+
+            /* Grid Layout */
+            .bench-grid {
+              display: grid;
+              grid-template-columns: repeat(1, 1fr);
+              gap: 24px;
+            }
+            @media (min-width: 640px) {
+              .bench-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+            }
+            @media (min-width: 1024px) {
+              .bench-grid {
+                grid-template-columns: repeat(3, 1fr);
+              }
+            }
+
+            /* Card Container */
+            .bench-card {
+              background: rgba(26, 26, 26, 0.45);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border-radius: 20px;
+              padding: 28px 24px;
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              min-height: 250px;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+              text-align: left !important;
+              transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                          box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                          border-color 0.4s ease;
+            }
+
+            .bench-card:hover {
+              transform: translateY(-8px);
+              border-color: rgba(59, 130, 246, 0.4);
+              box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+                          0 0 25px rgba(59, 130, 246, 0.15);
+            }
+
+            .bench-card::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+              opacity: 0;
+              transition: opacity 0.4s ease;
+              pointer-events: none;
+            }
+
+            .bench-card:hover::before {
+              opacity: 1;
+            }
+
+            /* Card Header */
+            .bench-card-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              margin-bottom: 20px;
+            }
+
+            /* Experience Tag */
+            .bench-card-exp {
+              font-size: 11px;
+              font-weight: 600;
+              padding: 4px 10px;
+              border-radius: 8px;
+              background: rgba(59, 130, 246, 0.1);
+              color: #60a5fa;
+              border: 1px solid rgba(59, 130, 246, 0.2);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              display: inline-flex;
+              align-items: center;
+            }
+
+            /* Status Indicator */
+            .bench-card-status {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 11px;
+              font-weight: 600;
+              color: #34d399; /* soft emerald */
+              background: rgba(52, 211, 153, 0.1);
+              padding: 4px 10px;
+              border-radius: 8px;
+              border: 1px solid rgba(52, 211, 153, 0.15);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+            }
+
+            .bench-card-status-dot {
+              width: 6px;
+              height: 6px;
+              background-color: #10b981;
+              border-radius: 50%;
+              animation: pulse-dot 2s infinite;
+            }
+
+            @keyframes pulse-dot {
+              0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+              }
+              50% {
+                transform: scale(1.3);
+                opacity: 0.5;
+              }
+            }
+
+            /* Role / Title */
+            .bench-card-role {
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: #ffffff;
+              margin: 0 0 20px 0;
+              line-height: 1.35;
+              letter-spacing: -0.01em;
+              text-align: left !important;
+            }
+
+            /* Divider */
+            .bench-card-divider {
+              border: none;
+              border-top: 1px solid rgba(255, 255, 255, 0.06);
+              margin: 0 0 16px 0;
+              width: 100%;
+            }
+
+            /* Tech Section */
+            .bench-card-tech-section {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              text-align: left !important;
+            }
+
+            .bench-card-tech-label {
+              font-size: 11px;
+              font-weight: 600;
+              color: rgba(255, 255, 255, 0.4);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              display: block;
+            }
+
+            .bench-card-tech-list {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 6px 10px;
+            }
+
+            /* Tech Pills */
+            .bench-card-tech-pill {
+              font-size: 11px;
+              font-weight: 600;
+              color: rgba(255, 255, 255, 0.75);
+              background: rgba(255, 255, 255, 0.04);
+              border: 1px solid rgba(255, 255, 255, 0.06);
+              padding: 4px 10px;
+              border-radius: 8px;
+              transition: all 0.3s ease;
+            }
+
+            .bench-card:hover .bench-card-tech-pill {
+              border-color: rgba(255, 255, 255, 0.12);
+              background: rgba(255, 255, 255, 0.06);
+              color: rgba(255, 255, 255, 0.95);
+            }
+
+            .bench-card-tech-pill:hover {
+              background: rgba(59, 130, 246, 0.15) !important;
+              color: #60a5fa !important;
+              border-color: rgba(59, 130, 246, 0.3) !important;
+            }
+
+            /* Card CTA Footer */
+            .bench-card-footer {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-top: auto;
+              padding-top: 16px;
+              border-top: 1px dashed rgba(255, 255, 255, 0.06);
+              font-size: 12px;
+              font-weight: 600;
+              color: rgba(255, 255, 255, 0.45);
+              transition: color 0.3s ease;
+            }
+
+            .bench-card:hover .bench-card-footer {
+              color: #60a5fa;
+            }
+
+            .bench-card-footer-arrow {
+              display: inline-flex;
+              align-items: center;
+              transition: transform 0.3s ease;
+            }
+
+            .bench-card:hover .bench-card-footer-arrow {
+              transform: translateX(4px);
+            }
+
+            /* Modal transition and layout overrides */
+            .animate-fade-in {
+              animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            .bench-modal-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: fixed;
+              inset: 0;
+              z-index: 1000;
+              padding: 24px;
+            }
+            .bench-modal-backdrop {
+              position: absolute;
+              inset: 0;
+              background: rgba(0, 0, 0, 0.75);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+            }
+            .bench-modal-card {
+              position: relative;
+              background: #0d0d12;
+              border-radius: 24px;
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              width: 100%;
+              max-width: 480px;
+              padding: 32px;
+              box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(59, 130, 246, 0.05);
+              z-index: 1010;
+              text-align: left !important;
+              margin: auto;
+            }
+            .bench-modal-close {
+              position: absolute;
+              top: 20px;
+              right: 20px;
+              background: rgba(255, 255, 255, 0.04);
+              border: 1px solid rgba(255, 255, 255, 0.06);
+              width: 36px;
+              height: 36px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: rgba(255, 255, 255, 0.5);
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-size: 13px;
+            }
+            .bench-modal-close:hover {
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+              color: #ffffff;
+            }
+            .bench-modal-title-wrapper {
+              margin-bottom: 24px;
+              padding-bottom: 16px;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            }
+            .bench-modal-badge {
+              display: inline-block;
+              font-size: 11px;
+              font-weight: 600;
+              padding: 4px 10px;
+              border-radius: 8px;
+              background: rgba(59, 130, 246, 0.1);
+              color: #60a5fa;
+              border: 1px solid rgba(59, 130, 246, 0.15);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              margin-bottom: 12px;
+            }
+            .bench-modal-role {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: #ffffff;
+              margin: 0;
+              line-height: 1.25;
+            }
+            .bench-modal-info-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              margin-bottom: 24px;
+              padding-bottom: 20px;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            }
+            .bench-modal-info-item {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+            }
+            .bench-modal-info-label {
+              font-size: 11px;
+              font-weight: 600;
+              color: rgba(255, 255, 255, 0.4);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+            }
+            .bench-modal-info-value {
+              font-size: 16px;
+              font-weight: 700;
+              color: #ffffff;
+            }
+            .bench-modal-actions {
+              display: flex;
+              gap: 16px;
+              margin-top: 32px;
+            }
+            .bench-modal-btn {
+              flex: 1;
+              padding: 12px 20px;
+              border-radius: 12px;
+              font-size: 14px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+            }
+            .bench-modal-btn-secondary {
+              background: rgba(255, 255, 255, 0.04);
+              border: 1px solid rgba(255, 255, 255, 0.08);
+              color: #ffffff;
+            }
+            .bench-modal-btn-secondary:hover {
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+            }
+            .bench-modal-btn-primary {
+              background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+              border: none;
+              color: #ffffff;
+            }
+            .bench-modal-btn-primary:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);
+            }
+          `}</style>
+
           {/* Filter Bar */}
-          <div className="flex flex-col gap-4 mb-10 w-full">
-            <style>{`
-              .tech-scrollbar-hide::-webkit-scrollbar {
-                display: none;
-              }
-              .tech-scrollbar-hide {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-              }
-            `}</style>
-            <div className="flex items-center justify-between gap-4 border border-white/10 bg-secondary/30 p-4 rounded-2xl w-full overflow-hidden">
-              <div className="flex gap-2 items-center overflow-x-auto tech-scrollbar-hide py-1 w-full mask-edges">
-                <style>{`
-                  .mask-edges {
-                    mask-image: linear-gradient(to right, black 95%, transparent 100%);
-                    -webkit-mask-image: linear-gradient(to right, black 95%, transparent 100%);
-                  }
-                `}</style>
+          <div className="bench-filter-container mb-10">
+            <div className="bench-filter-wrapper">
+              <div className="bench-tech-list mask-edges">
                 {techStackList.map((tech) => (
                   <button
                     key={tech}
                     onClick={() => setSelectedTech(tech)}
-                    className={`shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${selectedTech === tech
-                        ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                        : 'bg-dark/40 text-text-light hover:text-white border border-white/5 hover:border-white/10'
-                      }`}
+                    className={`bench-filter-btn ${selectedTech === tech ? 'active' : ''}`}
                   >
                     {tech}
                   </button>
                 ))}
               </div>
 
-              <div className="relative shrink-0 ml-2 z-10">
+              <div ref={experienceRef} className="bench-exp-dropdown-wrapper">
                 <button
                   onClick={() => setIsExperienceFilterOpen(!isExperienceFilterOpen)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 ${isExperienceFilterOpen || selectedExperience !== 'All Experience'
-                      ? 'bg-blue-500/10 border-blue-500 text-white'
-                      : 'bg-dark/40 border-white/10 text-text-light hover:text-white'
-                    }`}
+                  className={`bench-exp-dropdown-btn ${isExperienceFilterOpen || selectedExperience !== 'All Experience' ? 'active' : ''}`}
                 >
                   <span>Experience</span>
                   {selectedExperience !== 'All Experience' && (
-                    <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                    <span className="bench-exp-badge">
                       {selectedExperience.split(' ')[0]}
                     </span>
                   )}
                   <svg
-                    className={`w-4 h-4 transition-transform duration-300 ${isExperienceFilterOpen ? 'rotate-180' : ''}`}
+                    className="w-4 h-4"
+                    style={{
+                      transition: 'transform 0.3s ease',
+                      transform: isExperienceFilterOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                    }}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -1545,7 +2078,7 @@ export function BenchResourcesPage() {
 
                 {/* Experience Filter Dropdown */}
                 {isExperienceFilterOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl border border-white/10 bg-[#161b22] backdrop-blur-md shadow-2xl overflow-hidden z-50 flex flex-col py-2 transition-all duration-300">
+                  <div className="bench-exp-dropdown-menu">
                     {['All Experience', '0-2 Years', '3-5 Years', '6+ Years'].map((exp) => (
                       <button
                         key={exp}
@@ -1553,10 +2086,7 @@ export function BenchResourcesPage() {
                           setSelectedExperience(exp);
                           setIsExperienceFilterOpen(false);
                         }}
-                        className={`px-4 py-2.5 text-sm font-medium text-left transition-all duration-200 ${selectedExperience === exp
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'text-text-light hover:bg-white/5 hover:text-white'
-                          }`}
+                        className={`bench-exp-dropdown-item ${selectedExperience === exp ? 'active' : ''}`}
                       >
                         {exp}
                       </button>
@@ -1579,53 +2109,48 @@ export function BenchResourcesPage() {
               <p className="text-text-light max-w-md">{error}</p>
             </div>
           ) : filteredMembers.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bench-grid">
               {filteredMembers.map((member) => (
                 <div
-                  key={member._id || member.name}
+                  key={member._id}
                   onClick={() => setActiveModalMember(member)}
-                  className="card gradient-border bg-secondary/50 flex flex-col justify-between p-8 cursor-pointer relative overflow-hidden text-left"
-                  style={{
-                    transition: 'transform 0.35s ease, box-shadow 0.35s ease',
-                    transform: 'translateY(0)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-12px)';
-                    e.currentTarget.style.boxShadow = '0 25px 50px rgba(59, 130, 246, 0.25)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
+                  className="bench-card"
                 >
                   <div>
-                    {/* Header Row: Name on Left, Experience (borderless) on Right */}
-                    <div className="flex justify-between items-start gap-4 mb-4" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', marginBottom: '16px' }}>
-                      <h3 className="text-xl font-bold text-white" style={{ fontSize: '18px', lineHeight: '1.4' }}>
-                        {member.name}
-                      </h3>
-                      <span
-                        className="text-xs px-2.5 py-1 rounded-full font-semibold bg-blue-500/10 text-blue-400 whitespace-nowrap"
-                        style={{ fontSize: '11px', display: 'inline-block', border: 'none' }}
-                      >
+                    {/* Header Row: Experience Tag & Availability Status */}
+                    <div className="bench-card-header">
+                      <span className="bench-card-exp">
                         {member.experience} Years Exp
                       </span>
+                      <span className="bench-card-status">
+                        <span className="bench-card-status-dot" />
+                        Available Now
+                      </span>
                     </div>
-                    <p className="text-text-light font-medium mb-6 text-sm">{member.role}</p>
+                    <h3 className="bench-card-role">{member.role}</h3>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/5">
-                    <span className="text-xs text-text-light/60 block mb-2 font-medium">Key Technologies:</span>
-                    <div className="flex flex-wrap" style={{ gap: '8px 12px' }}>
+
+                  <hr className="bench-card-divider" />
+
+                  <div className="bench-card-tech-section">
+                    <span className="bench-card-tech-label">Key Technologies:</span>
+                    <div className="bench-card-tech-list">
                       {member.techStack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="bg-white/5 text-white/90 text-[11px] px-2.5 py-1 rounded-lg font-semibold"
-                          style={{ border: 'none' }}
-                        >
+                        <span key={tech} className="bench-card-tech-pill">
                           {tech}
                         </span>
                       ))}
                     </div>
+                  </div>
+
+                  <div className="bench-card-footer">
+                    <span>View Profile & Rates</span>
+                    <span className="bench-card-footer-arrow">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
                   </div>
                 </div>
               ))}
@@ -1656,191 +2181,77 @@ export function BenchResourcesPage() {
 
       {/* Modal Popup Details */}
       {activeModalMember && (
-        <div
-          className="fixed inset-0 z-50 flex justify-center p-4 animate-fade-in"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1000,
-            display: 'flex',
-            justifyContent: 'center',
-            padding: '80px 16px 40px 16px',
-            overflowY: 'auto',
-          }}
-        >
+        <div className="bench-modal-container animate-fade-in">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+            className="bench-modal-backdrop"
             onClick={() => setActiveModalMember(null)}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              backdropFilter: 'blur(8px)',
-              zIndex: 1,
-            }}
           />
 
           {/* Modal Card */}
-          <div
-            className="card gradient-border bg-dark max-w-lg w-full relative z-10 p-6 sm:p-8 shadow-2xl border border-white/10"
-            style={{
-              maxWidth: '500px',
-              width: '100%',
-              position: 'relative',
-              zIndex: 1010,
-              backgroundColor: '#0a0a0a',
-              borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              margin: 'auto',
-            }}
-          >
+          <div className="bench-modal-card">
             {/* Close Button */}
             <button
               onClick={() => setActiveModalMember(null)}
-              className="absolute text-text-light hover:text-white transition-colors duration-200"
-              style={{
-                position: 'absolute',
-                top: '24px',
-                right: '24px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#a0a0a0',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
+              className="bench-modal-close"
             >
               ✕
             </button>
 
-            <div className="mb-6" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div className="badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-gray-900/50 backdrop-blur-sm" style={{ marginBottom: '12px' }}>
-                <span className="text-sm font-medium text-white">Candidate Profile</span>
-              </div>
-              <h2 className="text-3xl font-bold text-white mb-1" style={{ fontSize: '24px', fontWeight: '800' }}>
-                {activeModalMember.name}
-              </h2>
-              <p className="text-primary text-sm font-semibold">{activeModalMember.role}</p>
+            <div className="bench-modal-title-wrapper">
+              <span className="bench-modal-badge">Candidate Profile</span>
+              <h3 className="bench-modal-role">{activeModalMember.role}</h3>
             </div>
 
-            <div className="space-y-4 mb-8" style={{ marginBottom: '24px' }}>
-              <div
-                className="grid grid-cols-2 gap-4 border-b border-white/5 pb-4"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '16px',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                  paddingBottom: '16px',
-                }}
-              >
-                <div>
-                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                    EXPERIENCE
-                  </span>
-                  <span className="text-white text-base font-semibold">{activeModalMember.experience} Years</span>
-                </div>
-                <div>
-                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                    MONTHLY RATE
-                  </span>
-                  <span className="text-white text-base font-semibold">{activeModalMember.monthlyRate}</span>
-                </div>
+            <div className="bench-modal-info-grid">
+              <div className="bench-modal-info-item">
+                <span className="bench-modal-info-label">Experience</span>
+                <span className="bench-modal-info-value">{activeModalMember.experience} Years</span>
               </div>
-
-              <div
-                className="grid grid-cols-1 gap-2 border-b border-white/5 pb-4"
-                style={{
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                  paddingBottom: '16px',
-                }}
-              >
-                <div>
-                  <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-1" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                    INTERVIEW AVAILABILITY
-                  </span>
-                  <div className="flex items-center gap-2" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span
-                      className={`w-2 h-2 rounded-full ${activeModalMember.availability === 'Immediate' ? 'bg-emerald-500' : 'bg-amber-500'}`}
-                      style={{
-                        width: '8px',
-                        height: '8px',
-                        borderRadius: '50%',
-                        display: 'inline-block',
-                        backgroundColor: activeModalMember.availability === 'Immediate' ? '#10b981' : '#f59e0b',
-                        marginRight: '8px',
-                      }}
-                    />
-                    <span className="text-white text-base font-semibold">{activeModalMember.availability}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-xs text-text-light/60 block font-medium uppercase tracking-wider mb-2" style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                  KEY TECHNOLOGIES
-                </span>
-                <div className="flex flex-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 10px' }}>
-                  {activeModalMember.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="bg-white/5 text-white/90 text-xs px-3 py-1.5 rounded-lg border border-white/5 font-semibold"
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                        padding: '4px 10px',
-                        borderRadius: '8px',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        color: '#f3f4f6',
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+              <div className="bench-modal-info-item">
+                <span className="bench-modal-info-label">Monthly Rate</span>
+                <span className="bench-modal-info-value">{activeModalMember.monthlyRate}</span>
               </div>
             </div>
 
-            <div className="flex gap-4" style={{ display: 'flex', gap: '16px' }}>
+            <div style={{ marginBottom: '24px', paddingBottom: '20px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <span className="bench-modal-info-label" style={{ display: 'block', marginBottom: '8px' }}>Interview Availability</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    display: 'inline-block',
+                    backgroundColor: activeModalMember.availability === 'Immediate' ? '#10b981' : '#f59e0b',
+                    boxShadow: activeModalMember.availability === 'Immediate' ? '0 0 10px #10b981' : '0 0 10px #f59e0b'
+                  }}
+                />
+                <span className="bench-modal-info-value">{activeModalMember.availability}</span>
+              </div>
+            </div>
+
+            <div>
+              <span className="bench-modal-info-label" style={{ display: 'block', marginBottom: '12px' }}>Key Technologies</span>
+              <div className="bench-card-tech-list">
+                {activeModalMember.techStack.map((tech) => (
+                  <span key={tech} className="bench-card-tech-pill">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bench-modal-actions">
               <button
                 onClick={() => setActiveModalMember(null)}
-                className="btn text-white"
-                style={{
-                  flex: 1,
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  textAlign: 'center',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                }}
+                className="bench-modal-btn bench-modal-btn-secondary"
               >
                 Close Profile
               </button>
               <a
                 href="/contact"
-                className="btn btn-primary"
-                style={{
-                  flex: 1,
-                  textAlign: 'center',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  fontWeight: '600',
-                }}
+                className="bench-modal-btn bench-modal-btn-primary"
               >
                 Request Interview
               </a>
@@ -2060,7 +2471,6 @@ function AdminBenchResourcesPage() {
   function startEdit(resource: BenchResource) {
     setEditingId(resource._id || resource.id || null);
     setFormData({
-      name: resource.name,
       role: resource.role,
       experience: resource.experience,
       techStack: resource.techStack,
@@ -2145,17 +2555,6 @@ function AdminBenchResourcesPage() {
           </div>
 
           <div className="admin-form-grid">
-            <div className="admin-field">
-              <label className="admin-label">Name</label>
-              <input
-                className="admin-input"
-                placeholder="Candidate Full Name"
-                value={formData.name}
-                onChange={(event) => updateField('name', event.target.value)}
-                required
-              />
-            </div>
-
             <div className="admin-field">
               <label className="admin-label">Role</label>
               <input
@@ -2271,7 +2670,6 @@ function AdminBenchResourcesPage() {
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
                     <th>Role</th>
                     <th>Exp</th>
                     <th>Tech Stack</th>
@@ -2284,8 +2682,7 @@ function AdminBenchResourcesPage() {
                 </thead>
                 <tbody>
                   {resources.map((resource) => (
-                    <tr key={resource._id || resource.name}>
-                      <td className="candidate-name-cell">{resource.name}</td>
+                    <tr key={resource._id}>
                       <td>{resource.role}</td>
                       <td>{resource.experience} yrs</td>
                       <td className="tech-stack-cell">
@@ -2328,7 +2725,7 @@ function AdminBenchResourcesPage() {
           <div className="admin-modal-card">
             <h2 className="admin-modal-title">Delete Resource</h2>
             <p className="admin-modal-text">
-              Are you sure you want to delete <strong>{deleteTarget.name}</strong>? This action will remove the candidate from both the admin dashboard and public bench resources directory.
+              Are you sure you want to delete <strong>{deleteTarget.role}</strong>? This action will remove the candidate from both the admin dashboard and public bench resources directory.
             </p>
             <div className="admin-modal-actions">
               <button className="admin-modal-btn-cancel" type="button" onClick={() => setDeleteTarget(null)}>

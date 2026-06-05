@@ -137,42 +137,43 @@ const Hero: React.FC = () => {
 
           {/* Stats Section with Staggered Animation */}
           <motion.div
-            className="flex items-center gap-12 text-center flex-col sm:flex-row overflow-visible"
+            className="flex items-center text-center flex-col sm:flex-row overflow-visible"
+            style={{ gap: 'clamp(2.5rem, 6vw, 5.5rem)', marginTop: '1.5rem', position: 'relative', top: '48px' }}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             <motion.div variants={staggerItemVariants}>
               <motion.div
-                className="text-3xl md:text-4xl font-bold text-white"
+                className="text-4xl md:text-5xl font-bold text-white"
                 whileInView={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.6 }}
               >
                 75+
               </motion.div>
-              <div className="text-sm text-white mr-4">Projects Completed</div>
+              <div className="text-base md:text-lg text-white">Projects Completed</div>
             </motion.div>
 
             <motion.div variants={staggerItemVariants}>
               <motion.div
-                className="text-3xl md:text-4xl font-bold text-white"
+                className="text-4xl md:text-5xl font-bold text-white"
                 whileInView={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.6 }}
               >
                 98%
               </motion.div>
-              <div className="text-sm text-white mr-4">Client Satisfaction</div>
+              <div className="text-base md:text-lg text-white">Client Satisfaction</div>
             </motion.div>
 
             <motion.div variants={staggerItemVariants}>
               <motion.div
-                className="text-3xl md:text-4xl font-bold text-white"
+                className="text-4xl md:text-5xl font-bold text-white"
                 whileInView={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.6 }}
               >
                 5+
               </motion.div>
-              <div className="text-sm text-white mr-4">Years Experience</div>
+              <div className="text-base md:text-lg text-white">Years Experience</div>
             </motion.div>
           </motion.div>
         </motion.div>

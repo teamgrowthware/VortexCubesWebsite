@@ -1,7 +1,6 @@
 export interface BenchResource {
   _id?: string;
   id?: string;
-  name: string;
   role: string;
   experience: number;
   techStack: string[];
@@ -14,7 +13,6 @@ export interface BenchResource {
 }
 
 export type BenchResourcePayload = {
-  name: string;
   role: string;
   experience: number;
   techStack: string[];

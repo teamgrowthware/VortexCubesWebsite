@@ -169,24 +169,6 @@ const Services: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* View All Button */}
-        <motion.div
-          className="text-center mt-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-        >
-          <motion.a
-            href="/services"
-            className="btn btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            View All Services
-          </motion.a>
-        </motion.div>
       </div>
     </section>
   );
