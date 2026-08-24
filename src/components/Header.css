@@ -163,7 +163,7 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(251, 146, 60, 0.2);
   min-width: 450px;
   overflow: hidden;
   z-index: 100;
@@ -189,13 +189,13 @@
 
 .dropdown-item:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: white;
+  color: #fb923c;
   padding-left: 1.25rem;
 }
 
 .dropdown-item.active {
-  color: #3B82F6;
-  background: rgba(59, 130, 246, 0.05);
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.1);
 }
 
 /* Adjustments for dropdown arrow */
@@ -204,7 +204,7 @@
 }
 
 .nav-link.active svg {
-  color: #3B82F6;
+  color: #fb923c;
 }
 
 /* ========================================
@@ -278,13 +278,13 @@
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.02);
-  border-left-color: #3B82F6;
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.05);
+  border-left-color: #fb923c;
 }
 
 .mobile-nav-link.active {
-  color: #3B82F6;
+  color: #fb923c;
 }
 
 /* Mobile Dropdown Toggle Button */
@@ -296,7 +296,8 @@
 }
 
 .mobile-dropdown-toggle:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(251, 146, 60, 0.05);
+  color: #fb923c;
 }
 
 /* Mobile Dropdown Content */
@@ -328,15 +329,15 @@
 
 .mobile-dropdown-item:hover,
 .mobile-dropdown-item.active {
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.015);
-  border-left-color: rgba(59, 130, 246, 0.5);
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.05);
+  border-left-color: rgba(251, 146, 60, 0.5);
   padding-left: 1rem;
 }
 
 .mobile-dropdown-item.active {
-  color: #3B82F6;
-  border-left-color: #3B82F6;
+  color: #fb923c;
+  border-left-color: #fb923c;
 }
 
 /* Mobile Contact Button */
@@ -351,15 +352,15 @@
   letter-spacing: 0.05em;
   padding: 1rem 1.5rem;
   margin-top: 1.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.2) 0%, rgba(249, 115, 22, 0.2) 100%);
+  border: 1px solid rgba(251, 146, 60, 0.4);
   border-radius: 8px;
   transition: all 0.25s ease;
 }
 
 .mobile-contact-btn:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(147, 51, 234, 0.25) 100%);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.35) 0%, rgba(249, 115, 22, 0.35) 100%);
+  border-color: rgba(251, 146, 60, 0.6);
   color: white;
 }
 

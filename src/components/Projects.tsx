@@ -18,7 +18,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true }}
       whileHover={{
         y: -8,
-        boxShadow: '0 16px 40px rgba(59, 130, 246, 0.35)',
+        boxShadow: '0 16px 40px rgba(251, 146, 60, 0.35)',
       }}
       onClick={() => openModal(project)}
     >

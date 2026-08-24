@@ -52,7 +52,7 @@ const Hero: React.FC = () => {
             variants={badgeVariants}
           >
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="4" cy="4" r="3" fill="#3B82F6" className="animate-pulse"></circle>
+              <circle cx="4" cy="4" r="3" fill="#fb923c" className="animate-pulse"></circle>
             </svg>
             <span className="text-sm font-medium text-white">Innovation Meets Engineering</span>
           </motion.div>
@@ -103,7 +103,7 @@ const Hero: React.FC = () => {
                 boxShadow: '0 2px 12px rgba(255,255,255,0.12)',
                 whiteSpace: 'nowrap',
               }}
-              whileHover={{ scale: 1.05, boxShadow: '0 4px 24px rgba(255,255,255,0.2)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 4px 24px rgba(251,146,60,0.35)' }}
               whileTap={{ scale: 0.95 }}
             >
               VIEW WORK
@@ -128,7 +128,7 @@ const Hero: React.FC = () => {
                 transition: 'transform 0.25s, border-color 0.25s, background 0.25s',
                 whiteSpace: 'nowrap',
               }}
-              whileHover={{ scale: 1.05, borderColor: 'rgba(255,255,255,0.55)', background: 'rgba(40,40,40,0.9)' }}
+              whileHover={{ scale: 1.05, borderColor: 'rgba(251,146,60,0.75)', background: 'rgba(63,28,8,0.9)' }}
               whileTap={{ scale: 0.95 }}
             >
               REQUEST DEMO

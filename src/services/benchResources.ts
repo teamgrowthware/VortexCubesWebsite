@@ -37,10 +37,11 @@ export function loginAdmin(payload: { email: string; password: string }) {
   });
 }
 
-export function signupAdmin(payload: { name: string; email: string; password: string }) {
+export function signupAdmin(payload: { name: string; email: string; password: string }, signupKey: string) {
   return apiRequest<AdminAuthResponse>('/auth/signup', {
     method: 'POST',
     body: JSON.stringify(payload),
+    headers: { 'x-admin-signup-key': signupKey },
   });
 }
 

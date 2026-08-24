@@ -13,7 +13,7 @@ const Services: React.FC = () => {
     {
       id: 1,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
       ),
@@ -24,7 +24,7 @@ const Services: React.FC = () => {
     {
       id: 2,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" />
         </svg>
       ),
@@ -35,7 +35,7 @@ const Services: React.FC = () => {
     {
       id: 3,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
       ),
@@ -46,7 +46,7 @@ const Services: React.FC = () => {
     {
       id: 4,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
         </svg>
       ),
@@ -57,7 +57,7 @@ const Services: React.FC = () => {
     {
       id: 5,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
         </svg>
       ),
@@ -68,7 +68,7 @@ const Services: React.FC = () => {
     {
       id: 6,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
         </svg>
       ),
@@ -79,7 +79,7 @@ const Services: React.FC = () => {
     {
       id: 7,
       icon: (
-        <svg className="w-5 h-5 text-blue-500 group-hover:text-purple-400 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-orange-300 group-hover:text-orange-200 transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
         </svg>
       ),
@@ -141,22 +141,22 @@ const Services: React.FC = () => {
           {services.map((service, index) => (
             <motion.div
               key={service.id}
-              className="card bg-[#0b0c10]/80 border border-white/[0.06] hover:border-blue-500/30 rounded-xl transition-all duration-300 flex flex-col group"
+              className="text-left card bg-[#0b0c10]/80 border border-orange-600/60 hover:border-orange-900 rounded-xl transition-all duration-600 flex flex-col group "
               variants={staggerAlternateSlideVariants}
               custom={index}
               whileHover={{
                 y: -4,
-                boxShadow: '0 10px 25px -8px rgba(59, 130, 246, 0.2)',
+                boxShadow: '0 10px 25px -8px rgba(250, 124, 21, 0.28)',
               }}
               transition={{ duration: 0.2 }}
             >
-              <div className="p-4 sm:p-5 flex flex-col flex-grow">
+              <div className="p-4 sm:p-5 flex flex-col flex-grow text-left">
                 {/* Header: Icon + Title */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="flex-shrink-0 mt-1 p-2 rounded-lg bg-blue-500/5 group-hover:bg-purple-500/10 group-hover:text-purple-400 transition-colors duration-300">
+                  <div className="flex-shrink-0 mt-1 p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500/20 group-hover:text-orange-300 transition-colors duration-300">
                     {service.icon}
                   </div>
-                  <h3 className="text-sm sm:text-base font-semibold text-white/90 group-hover:text-blue-400 transition-colors duration-300 leading-snug mt-0.5">
+                  <h3 className="text-sm sm:text-base font-semibold text-white/90 group-hover:text-orange-300 transition-colors duration-300 leading-snug mt-0.5">
                     {service.title}
                   </h3>
                 </div>

@@ -45,8 +45,8 @@ const Sectors: React.FC = () => {
           <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
         </svg>
       ),
-      dotColor: '#3b82f6',
-      chevronColor: '#3b82f6',
+      dotColor: '#fb923c',
+      chevronColor: '#fb923c',
     },
     {
       name: 'E-Commerce',
@@ -68,8 +68,8 @@ const Sectors: React.FC = () => {
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
       ),
-      dotColor: '#3b82f6',
-      chevronColor: '#3b82f6',
+      dotColor: '#fb923c',
+      chevronColor: '#fb923c',
     },
     {
       name: 'Healthcare',
@@ -89,8 +89,8 @@ const Sectors: React.FC = () => {
           <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
         </svg>
       ),
-      dotColor: '#3b82f6',
-      chevronColor: '#3b82f6',
+      dotColor: '#fb923c',
+      chevronColor: '#fb923c',
     },
     {
       name: 'Startups & SaaS',
@@ -111,8 +111,8 @@ const Sectors: React.FC = () => {
           <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
         </svg>
       ),
-      dotColor: '#3b82f6',
-      chevronColor: '#3b82f6',
+      dotColor: '#fb923c',
+      chevronColor: '#fb923c',
     },
     {
       name: 'Logistics Tech',
@@ -323,11 +323,11 @@ const Sectors: React.FC = () => {
             >
               <defs>
                 <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
-                  <stop offset="15%" stopColor="#3b82f6" stopOpacity="0.6" />
+                  <stop offset="0%" stopColor="#fb923c" stopOpacity="0.1" />
+                  <stop offset="15%" stopColor="#fb923c" stopOpacity="0.6" />
                   <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.6" />
-                  <stop offset="85%" stopColor="#3b82f6" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
+                  <stop offset="85%" stopColor="#fb923c" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#fb923c" stopOpacity="0.1" />
                 </linearGradient>
               </defs>
               
@@ -341,8 +341,8 @@ const Sectors: React.FC = () => {
               />
 
               {/* Start / End Dots */}
-              <circle cx="20" cy="200" r="4.5" fill="#3b82f6" opacity="0.8" />
-              <circle cx="1180" cy="200" r="4.5" fill="#3b82f6" opacity="0.8" />
+              <circle cx="20" cy="200" r="4.5" fill="#fb923c" opacity="0.8" />
+              <circle cx="1180" cy="200" r="4.5" fill="#fb923c" opacity="0.8" />
             </svg>
 
             {/* Interactive Orbital Badges & Connectors */}

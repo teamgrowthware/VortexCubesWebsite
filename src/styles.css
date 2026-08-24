@@ -6,7 +6,7 @@
   --color-secondary: #1a1a1a;
   --color-primary: #3b82f6;
   --color-text: #ffffff;
-  --color-text-light: #a0a0a0;
+  --color-text-light: #d4d4d8;
   --color-border: #333333;
 }
 
@@ -837,4 +837,22 @@ footer {
   .pricing-card-price {
     font-size: 3.5rem;
   }
+}
+
+/* KPI Cards Orange Border and Hover styling */
+.kpi-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.kpi-card:before {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.4) 0%, rgba(251, 146, 60, 0.1) 100%) !important;
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 0 25px rgba(251, 146, 60, 0.35) !important;
+}
+
+.kpi-card:hover:before {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%) !important;
 }

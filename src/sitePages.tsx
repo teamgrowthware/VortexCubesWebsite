@@ -361,9 +361,11 @@ function PageHero({
           <path d="M1920 0V907H0V0H1920Z" fill="url(#pageHeroGlow)"></path>
         </g>
         <defs>
-          <radialGradient id="pageHeroGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#3B82F6"></stop>
-            <stop offset="1" stopColor="#3B82F6" stopOpacity="0"></stop>
+          <radialGradient id="pageHeroGlow" cx="50%" cy="30%" r="45%" fx="50%" fy="30%">
+            <stop offset="0%" stopColor="#FB923C" stopOpacity="0.05"></stop>
+            <stop offset="50%" stopColor="#FB923C" stopOpacity="0.02"></stop>
+            <stop offset="85%" stopColor="#FB923C" stopOpacity="0"></stop>
+            <stop offset="100%" stopColor="#FB923C" stopOpacity="0"></stop>
           </radialGradient>
         </defs>
       </svg>
@@ -503,7 +505,7 @@ function Timeline({
             {String(index + 1).padStart(2, '0')}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg,#fb923c,#f97316)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>
               {timelineIcons[index] ?? '⚙️'}
             </div>
             <h3 className="text-h5 font-semibold" style={{ paddingRight: '36px' }}>{item.title}</h3>
@@ -674,7 +676,7 @@ function AboutPage() {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {aboutStats.map((stat) => (
-              <div key={stat.label} className="card gradient-border bg-secondary/50 text-center">
+              <div key={stat.label} className="card gradient-border bg-secondary/50 text-center kpi-card">
                 <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
                 <div className="text-text-light">{stat.label}</div>
               </div>
@@ -838,7 +840,7 @@ function ServicesPage() {
               return (
                 <div
                   key={service.title}
-                  className="card gradient-border bg-dark relative overflow-hidden flex flex-col"
+                  className="card gradient-border bg-dark relative overflow-hidden flex flex-col text-left"
                   style={{
                     transition: 'transform 0.35s ease, box-shadow 0.35s ease',
                     transform: 'translateY(0)',
@@ -847,7 +849,7 @@ function ServicesPage() {
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-12px)';
                     e.currentTarget.style.boxShadow =
-                      '0 25px 50px rgba(59, 130, 246, 0.25)';
+                      '0 25px 50px rgba(251, 146, 60, 0.35)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -867,27 +869,27 @@ function ServicesPage() {
                     />
                   </svg>
 
-                  <div className="px-6 pt-6 pb-6 relative z-10 flex flex-col h-full">
+                  <div className="px-6 pt-6 pb-6 relative z-10 flex flex-col h-full text-left">
 
                     {/* Top Content */}
-                    <div>
-                      <h3 className="text-xl font-semibold gradient-text mb-4 leading-snug">
+                    <div className="text-left">
+                      <h3 className="text-xl font-semibold gradient-text mb-4 leading-snug text-left">
                         {service.title}
                       </h3>
 
                       <p
-                        className="text-[15px] text-text-light"
+                        className="text-[15px] text-text-light text-left"
                         style={{ lineHeight: '1.8' }}
                       >
                         {service.description}
                       </p>
                     </div>
 
-                    {/* Bottom Right Button */}
-                    <div className="mt-auto flex justify-end pt-6">
+                    {/* Bottom Left Button */}
+                    <div className="mt-auto flex justify-start pt-6">
                       <a
                         href={service.href}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 transition-all duration-300 text-sm font-medium text-white group"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 transition-all duration-300 text-sm font-medium text-white group"
                       >
                         Learn More
 
@@ -1070,7 +1072,7 @@ function ContactPage() {
         title="Have a project? Let’s talk."
         description="Your ideas are safe with us, and we’re quick to respond with a clear next step."
         ctas={[
-          { label: 'Email Us', href: 'mailto:hello@vortexcubes.com' },
+          { label: 'Email Us', href: 'mailto:info@vortexcubes.com' },
           { label: 'View Services', href: '/services' },
         ]}
       />
@@ -1083,10 +1085,10 @@ function ContactPage() {
                 Share a few details and we'll follow up with a plan that fits your timeline and scope.
               </p>
               <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" name="from_name" placeholder="Your Name" required />
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="email" name="from_email" placeholder="Your Email" required />
-                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white" type="text" name="budget" placeholder="Project Budget" />
-                <textarea className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white min-h-[180px]" name="message" placeholder="Tell us about your project" required />
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/40 transition-all duration-300" type="text" name="from_name" placeholder="Your Name" required />
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/40 transition-all duration-300" type="email" name="from_email" placeholder="Your Email" required />
+                <input className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/40 transition-all duration-300" type="text" name="budget" placeholder="Project Budget" />
+                <textarea className="w-full rounded-lg bg-dark/80 border border-white/10 px-4 py-3 text-white min-h-[180px] focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/40 transition-all duration-300" name="message" placeholder="Tell us about your project" required />
                 <button type="submit" className="btn btn-primary justify-center" disabled={status === 'loading'}>
                   {status === 'loading' ? 'Sending...' : 'Request a project'}
                 </button>
@@ -1104,11 +1106,11 @@ function ContactPage() {
                 Have questions? Reach out to us directly through any of the channels below. We're here to help and happy to discuss your project.
               </p>
               <div className="space-y-4 text-lg mt-4 w-full">
-                <p className="text-white">Email: <a href="mailto:hello@vortexcubes.com" className="hover:text-blue-400 transition">info@vortexcubes.com</a></p>
-                <p className="text-white">Phone: <a href="tel:+15551234567" className="hover:text-blue-400 transition">+91 7049820057</a></p>
+                <p className="text-white">Email: <a href="mailto:info@vortexcubes.com" className="hover:text-orange-400 transition">info@vortexcubes.com</a></p>
+                <p className="text-white">Phone: <a href="tel:+917049820057" className="hover:text-orange-400 transition">+91 7049820057</a></p>
                 <p className="text-white">Address: Indore, M.P - 452010</p>
               </div>
-              <a href="mailto:hello@vortexcubes.com" className="btn btn-primary mt-4">Send Email</a>
+              <a href="mailto:info@vortexcubes.com" className="btn btn-primary mt-4">Send Email</a>
             </div>
           </div>
         </div>
@@ -1119,7 +1121,7 @@ function ContactPage() {
           <SectionTitle badge="Process" title="What happens next?" description="Here's exactly what to expect after you reach out." />
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: 0, position: 'relative', flexWrap: 'wrap' }}>
             {[
-              { n: '01', title: 'We review your request', desc: 'Our team reads your submission and responds quickly with an acknowledgment.', color: '#3b82f6' },
+              { n: '01', title: 'We review your request', desc: 'Our team reads your submission and responds quickly with an acknowledgment.', color: '#fb923c' },
               { n: '02', title: 'We clarify scope & goals', desc: 'We ask a few quick questions to understand your timeline, priorities, and constraints.', color: '#a855f7' },
               { n: '03', title: 'We propose next steps', desc: 'We outline the best approach, whether that is a call, a proposal, or a quick start.', color: '#06b6d4' },
               { n: '04', title: 'We keep it simple', desc: 'Communication stays clear, direct, and on your schedule throughout the entire process.', color: '#10b981' },
@@ -1574,11 +1576,11 @@ export function BenchResourcesPage() {
               background: rgba(255, 255, 255, 0.05);
             }
 
-            .bench-filter-btn.active {
-              background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            .bench-tab-btn.active {
+              background: linear-gradient(135deg, #fb923c, #f97316);
               color: #ffffff;
               border-color: transparent;
-              box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+              box-shadow: 0 10px 20px rgba(251, 146, 60, 0.3);
             }
 
             .bench-exp-dropdown-wrapper {
@@ -1616,13 +1618,13 @@ export function BenchResourcesPage() {
             }
 
             .bench-exp-dropdown-btn.active {
-              background: rgba(59, 130, 246, 0.08);
-              border-color: #3b82f6;
+              background: rgba(251, 146, 60, 0.1);
+              border-color: #fb923c;
               color: #ffffff;
             }
 
             .bench-exp-badge {
-              background: #3b82f6;
+              background: #fb923c;
               color: #ffffff;
               font-size: 10px;
               padding: 2px 6px;
@@ -1671,8 +1673,8 @@ export function BenchResourcesPage() {
             }
 
             .bench-exp-dropdown-item.active {
-              background: rgba(59, 130, 246, 0.1);
-              color: #60a5fa;
+              background: rgba(251, 146, 60, 0.1);
+              color: #fb923c;
             }
 
             /* Grid Layout */
@@ -1715,9 +1717,9 @@ export function BenchResourcesPage() {
 
             .bench-card:hover {
               transform: translateY(-8px);
-              border-color: rgba(59, 130, 246, 0.4);
+              border-color: rgba(251, 146, 60, 0.4);
               box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-                          0 0 25px rgba(59, 130, 246, 0.15);
+                          0 0 25px rgba(251, 146, 60, 0.25);
             }
 
             .bench-card::before {
@@ -1727,7 +1729,7 @@ export function BenchResourcesPage() {
               left: 0;
               width: 100%;
               height: 100%;
-              background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+              background: linear-gradient(135deg, rgba(251, 146, 60, 0.08) 0%, transparent 100%);
               opacity: 0;
               transition: opacity 0.4s ease;
               pointer-events: none;
@@ -1752,9 +1754,9 @@ export function BenchResourcesPage() {
               font-weight: 600;
               padding: 4px 10px;
               border-radius: 8px;
-              background: rgba(59, 130, 246, 0.1);
-              color: #60a5fa;
-              border: 1px solid rgba(59, 130, 246, 0.2);
+              background: rgba(251, 146, 60, 0.1);
+              color: #fb923c;
+              border: 1px solid rgba(251, 146, 60, 0.3);
               text-transform: uppercase;
               letter-spacing: 0.05em;
               display: inline-flex;
@@ -1766,83 +1768,44 @@ export function BenchResourcesPage() {
               display: flex;
               align-items: center;
               gap: 6px;
-              font-size: 11px;
-              font-weight: 600;
-              color: #34d399; /* soft emerald */
-              background: rgba(52, 211, 153, 0.1);
-              padding: 4px 10px;
-              border-radius: 8px;
-              border: 1px solid rgba(52, 211, 153, 0.15);
-              text-transform: uppercase;
-              letter-spacing: 0.05em;
             }
-
             .bench-card-status-dot {
               width: 6px;
               height: 6px;
-              background-color: #10b981;
               border-radius: 50%;
-              animation: pulse-dot 2s infinite;
+              background: #10b981;
+              box-shadow: 0 0 8px #10b981;
+            }
+            .bench-card-status-text {
+              font-size: 11px;
+              font-weight: 600;
+              color: #10b981;
             }
 
-            @keyframes pulse-dot {
-              0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-              }
-              50% {
-                transform: scale(1.3);
-                opacity: 0.5;
-              }
-            }
-
-            /* Role / Title */
+            /* Role Title */
             .bench-card-role {
               font-size: 1.25rem;
               font-weight: 700;
               color: #ffffff;
-              margin: 0 0 20px 0;
-              line-height: 1.35;
-              letter-spacing: -0.01em;
-              text-align: left !important;
+              margin-bottom: 16px;
+              line-height: 1.3;
+              transition: color 0.3s ease;
+            }
+            .bench-card:hover .bench-card-role {
+              color: #fb923c;
             }
 
-            /* Divider */
-            .bench-card-divider {
-              border: none;
-              border-top: 1px solid rgba(255, 255, 255, 0.06);
-              margin: 0 0 16px 0;
-              width: 100%;
-            }
-
-            /* Tech Section */
-            .bench-card-tech-section {
-              display: flex;
-              flex-direction: column;
-              gap: 8px;
-              text-align: left !important;
-            }
-
-            .bench-card-tech-label {
-              font-size: 11px;
-              font-weight: 600;
-              color: rgba(255, 255, 255, 0.4);
-              text-transform: uppercase;
-              letter-spacing: 0.05em;
-              display: block;
-            }
-
-            .bench-card-tech-list {
+            /* Tech Stack Pills */
+            .bench-card-tech {
               display: flex;
               flex-wrap: wrap;
-              gap: 6px 10px;
+              gap: 6px;
+              margin-bottom: 20px;
             }
-
-            /* Tech Pills */
             .bench-card-tech-pill {
               font-size: 11px;
-              font-weight: 600;
-              color: rgba(255, 255, 255, 0.75);
+              font-weight: 500;
+              color: rgba(255, 255, 255, 0.7);
               background: rgba(255, 255, 255, 0.04);
               border: 1px solid rgba(255, 255, 255, 0.06);
               padding: 4px 10px;
@@ -1857,9 +1820,9 @@ export function BenchResourcesPage() {
             }
 
             .bench-card-tech-pill:hover {
-              background: rgba(59, 130, 246, 0.15) !important;
-              color: #60a5fa !important;
-              border-color: rgba(59, 130, 246, 0.3) !important;
+              background: rgba(251, 146, 60, 0.15) !important;
+              color: #fb923c !important;
+              border-color: rgba(251, 146, 60, 0.3) !important;
             }
 
             /* Card CTA Footer */
@@ -1877,7 +1840,7 @@ export function BenchResourcesPage() {
             }
 
             .bench-card:hover .bench-card-footer {
-              color: #60a5fa;
+              color: #fb923c;
             }
 
             .bench-card-footer-arrow {
@@ -1924,7 +1887,7 @@ export function BenchResourcesPage() {
               width: 100%;
               max-width: 480px;
               padding: 32px;
-              box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(59, 130, 246, 0.05);
+              box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(251, 146, 60, 0.1);
               z-index: 10010;
               text-align: left !important;
               margin: auto;
@@ -1975,9 +1938,9 @@ export function BenchResourcesPage() {
               font-weight: 600;
               padding: 4px 10px;
               border-radius: 8px;
-              background: rgba(59, 130, 246, 0.1);
-              color: #60a5fa;
-              border: 1px solid rgba(59, 130, 246, 0.15);
+              background: rgba(251, 146, 60, 0.1);
+              color: #fb923c;
+              border: 1px solid rgba(251, 146, 60, 0.3);
               text-transform: uppercase;
               letter-spacing: 0.05em;
               margin-bottom: 12px;
@@ -2041,13 +2004,13 @@ export function BenchResourcesPage() {
               border-color: rgba(255, 255, 255, 0.15);
             }
             .bench-modal-btn-primary {
-              background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+              background: linear-gradient(135deg, #fb923c, #f97316);
               border: none;
               color: #ffffff;
             }
             .bench-modal-btn-primary:hover {
               transform: translateY(-2px);
-              box-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);
+              box-shadow: 0 10px 20px rgba(251, 146, 60, 0.35);
             }
             
             @media (max-width: 480px) {
@@ -2323,6 +2286,7 @@ function AdminAuthPage({ mode }: { mode: 'login' | 'signup' }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [signupKey, setSignupKey] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -2339,7 +2303,7 @@ function AdminAuthPage({ mode }: { mode: 'login' | 'signup' }) {
 
     try {
       const response = isSignup
-        ? await signupAdmin({ name, email, password })
+        ? await signupAdmin({ name, email, password }, signupKey)
         : await loginAdmin({ email, password });
 
       storeAdminSession(response.token);
@@ -2370,6 +2334,20 @@ function AdminAuthPage({ mode }: { mode: 'login' | 'signup' }) {
                   placeholder="Enter your name"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
+                  required
+                />
+              </div>
+            ) : null}
+
+            {isSignup ? (
+              <div className="admin-field">
+                <label className="admin-label">Setup Key</label>
+                <input
+                  className="admin-input"
+                  type="password"
+                  placeholder="Enter the server setup key"
+                  value={signupKey}
+                  onChange={(event) => setSignupKey(event.target.value)}
                   required
                 />
               </div>

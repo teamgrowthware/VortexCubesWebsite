@@ -35,7 +35,7 @@ const ContactCTA: React.FC = () => {
             <motion.a
               href="mailto:info@vortexcubes.com"
               className="btn btn-primary px-12 py-5 text-lg font-bold rounded-full inline-flex items-center mt-8 mb-4 gap-3"
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(251, 146, 60, 0.55)' }}
               whileTap={{ scale: 0.95 }}
             >
               Contact Us
