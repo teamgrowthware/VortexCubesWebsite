@@ -57,12 +57,12 @@ const Newsletter: React.FC = () => {
                   type="email"
                   name="email"
                   placeholder="Enter your email"
-                  className="w-full px-8 h-12 rounded-full border border-gray-800 text-white focus:outline-none focus:border-primary transition-all placeholder:text-gray-500 bg-dark/80 text-sm"
+                  className="w-full px-8 h-12 rounded-full border border-gray-800 text-white focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/40 transition-all placeholder:text-gray-500 bg-dark/80 text-sm"
                   required
                 />
                 <motion.button
                   type="submit"
-                  className="px-8 h-10 rounded-full bg-primary text-black font-bold uppercase tracking-tight whitespace-nowrap transition-all shadow-lg hover:shadow-primary/20 flex-none text-sm"
+                  className="px-8 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold uppercase tracking-tight whitespace-nowrap transition-all shadow-lg hover:shadow-orange-500/25 flex-none text-sm"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   disabled={status === 'loading'}

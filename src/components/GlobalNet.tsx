@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import type { Object3D } from 'three';
 
 type CityNode = {
   lat: number;
@@ -38,7 +39,7 @@ const ALL_CITIES = [ORIGIN, ...DESTINATIONS];
 
 const Globe3D: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const globeRef = useRef<any>(null);
+  const globeRef = useRef<{ width: (value: number) => unknown; height: (value: number) => unknown } | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -92,15 +93,22 @@ const Globe3D: React.FC = () => {
         .arcColor('color')
         .arcDashLength(0.6)
         .arcDashGap(0.1)
-        .arcDashInitialGap((d: any) => d.delay / 2000)
+       .arcDashInitialGap((d: object) => (d as (typeof arcsData)[number]).delay / 2000)
         .arcDashAnimateTime(2500)
         .arcStroke(0.7);
 
       const scene = globe.scene();
-      scene.traverse((obj: any) => {
-        if ((obj.type === 'Line2' || obj.type === 'Mesh') && obj.material?.color?.getHex?.() === 0xffffff) {
-          obj.material.blending = THREE.AdditiveBlending;
-          obj.material.transparent = true;
+      scene.traverse((obj: Object3D) => {
+        const candidate = obj as Object3D & {
+          material?: {
+            color?: { getHex?: () => number };
+            blending?: unknown;
+            transparent?: boolean;
+          };
+        };
+        if ((obj.type === 'Line2' || obj.type === 'Mesh') && candidate.material?.color?.getHex?.() === 0xffffff) {
+          candidate.material.blending = THREE.AdditiveBlending;
+          candidate.material.transparent = true;
         }
       });
 
@@ -122,10 +130,11 @@ const Globe3D: React.FC = () => {
     };
 
     window.addEventListener('resize', handleResize);
+    const container = containerRef.current;
     return () => {
       isMounted = false;
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current) containerRef.current.innerHTML = '';
+      if (container) container.innerHTML = '';
     };
   }, []);
 

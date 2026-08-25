@@ -163,7 +163,7 @@ const Header: React.FC = () => {
                   <motion.a 
                     href={item.href} 
                     className={`nav-link${isActive(item.href) ? ' active' : ''}`}
-                    whileHover={{ color: '#3B82F6' }}
+                    whileHover={{ color: '#fb923c' }}
                     transition={{ duration: 0.2 }}
                   >
                     {item.label}
@@ -185,7 +185,7 @@ const Header: React.FC = () => {
               <motion.a 
                 href="/contact" 
                 className="contact-btn"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)' }}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(251, 146, 60, 0.45)' }}
                 whileTap={{ scale: 0.95 }}
               >
                 CONTACT US
@@ -255,7 +255,7 @@ const Header: React.FC = () => {
                       <motion.a 
                         href={item.href} 
                         className={`mobile-nav-link${isActive(item.href) ? ' active' : ''}`}
-                        whileHover={{ x: 8, color: '#3B82F6' }}
+                        whileHover={{ x: 8, color: '#fb923c' }}
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {item.label}
@@ -336,7 +336,7 @@ const Header: React.FC = () => {
                       <motion.a 
                         href={link.href} 
                         className={`mobile-nav-link${isActive(link.href) ? ' active' : ''}`}
-                        whileHover={{ x: 8, color: '#3B82F6' }}
+                        whileHover={{ x: 8, color: '#fb923c' }}
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {link.label}
@@ -355,7 +355,7 @@ const Header: React.FC = () => {
                     <motion.a 
                       href="/contact" 
                       className="mobile-contact-btn"
-                      whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' }}
+                      whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(251, 146, 60, 0.35)' }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setIsMenuOpen(false)}
                     >

@@ -7,7 +7,7 @@
   --color-secondary: #1a1a1a;
   --color-primary: #3b82f6;
   --color-text: #ffffff;
-  --color-text-light: #a0a0a0;
+  --color-text-light: #d4d4d8;
   --color-border: #333333;
   --color-gray-200: #e5e7eb;
   --color-red-500: #fb2c36;
@@ -609,11 +609,6 @@ footer {
 .bg-repeat { background-repeat: repeat; }
 .bg-auto { background-size: auto; }
 
-/* Custom Background */
-.bg-\[url\(\/images\/noise-pattern\.png\)\] {
-  background-image: url('/images/noise-pattern.png');
-}
-
 /* Keyboard Shortcuts */
 kbd {
   background: var(--color-secondary);
@@ -635,4 +630,22 @@ kbd {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* KPI Cards Orange Border and Hover styling */
+.kpi-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.kpi-card:before {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.4) 0%, rgba(251, 146, 60, 0.1) 100%) !important;
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 0 25px rgba(251, 146, 60, 0.35) !important;
+}
+
+.kpi-card:hover:before {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%) !important;
 }

@@ -4,7 +4,15 @@ const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-emailjs.init(PUBLIC_KEY);
+function assertEmailConfig() {
+  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+    throw new Error('Email service is not configured.');
+  }
+}
+
+if (PUBLIC_KEY) {
+  emailjs.init(PUBLIC_KEY);
+}
 
 export interface ContactEmailParams {
   from_name: string;
@@ -14,9 +22,11 @@ export interface ContactEmailParams {
 }
 
 export function sendContactEmail(params: ContactEmailParams) {
+  assertEmailConfig();
   return emailjs.send(SERVICE_ID, TEMPLATE_ID, { ...params });
 }
 
 export function sendNewsletterEmail(email: string) {
+  assertEmailConfig();
   return emailjs.send(SERVICE_ID, TEMPLATE_ID, { email, to_name: 'Vortex Cubes' });
 }

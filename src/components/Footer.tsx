@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
               viewport={{ once: true }}
             >
               {/* Logo and Social Section */}
-              <motion.div className="sm:col-span-6 lg:col-span-3" variants={staggerItemVariants}>
+              <motion.div className="sm:col-span-6 lg:col-span-3 text-left" variants={staggerItemVariants}>
                 <motion.a
                   className="navbar-brand inline-block"
                   href="/"
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
                   Your trusted partner for comprehensive IT solutions and product development. We build custom software that drives business growth.
                 </p>
                 <div className="social-icons">
-                  <ul className="flex gap-4 justify-center sm:justify-start">
+                  <ul className="flex gap-4 justify-start">
                     {socialLinks.map((link, i) => (
                       <motion.li
                         key={link.label}
@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer nofollow"
-                          whileHover={{ scale: 1.2, color: '#3B82F6' }}
+                          whileHover={{ scale: 1.2, color: '#fb923c' }}
                           whileTap={{ scale: 0.9 }}
                         >
                           <span className="sr-only">{link.label}</span>
@@ -90,12 +90,13 @@ const Footer: React.FC = () => {
               </motion.div>
 
               {/* Quick Links */}
-              <motion.div className="sm:col-span-6 lg:col-span-3" variants={staggerItemVariants}>
-                <h4 className="text-h5 font-semibold mb-6 text-primary">Company</h4>
-                <ul className="space-y-4">
+              <motion.div className="sm:col-span-6 lg:col-span-3 text-left" variants={staggerItemVariants}>
+                <h4 className="text-h5 font-semibold mb-6 text-primary text-left">Company</h4>
+                <ul className="space-y-4 text-left">
                   {quickLinks.map((link, i) => (
                     <motion.li
                       key={link.url}
+                      className="text-left"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
@@ -103,8 +104,8 @@ const Footer: React.FC = () => {
                     >
                       <motion.a
                         href={link.url}
-                        className="text-text-light transition-colors"
-                        whileHover={{ color: '#3B82F6', x: 5 }}
+                        className="text-text-light transition-colors inline-block text-left"
+                        whileHover={{ color: '#fb923c', x: 5 }}
                       >
                         {link.label}
                       </motion.a>
@@ -114,12 +115,13 @@ const Footer: React.FC = () => {
               </motion.div>
 
               {/* Services */}
-              <motion.div className="sm:col-span-6 lg:col-span-3" variants={staggerItemVariants}>
-                <h4 className="text-h5 font-semibold mb-6 text-primary">Services</h4>
-                <ul className="space-y-4">
+              <motion.div className="sm:col-span-6 lg:col-span-3 text-left" variants={staggerItemVariants}>
+                <h4 className="text-h5 font-semibold mb-6 text-primary text-left">Services</h4>
+                <ul className="space-y-4 text-left">
                   {services.map((service, i) => (
                     <motion.li
                       key={service.label}
+                      className="text-left"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
@@ -127,8 +129,8 @@ const Footer: React.FC = () => {
                     >
                       <motion.a
                         href={service.url}
-                        className="text-text-light transition-colors"
-                        whileHover={{ color: '#3B82F6', x: 5 }}
+                        className="text-text-light transition-colors inline-block text-left"
+                        whileHover={{ color: '#fb923c', x: 5 }}
                       >
                         {service.label}
                       </motion.a>
@@ -138,11 +140,11 @@ const Footer: React.FC = () => {
               </motion.div>
 
               {/* Contact Info */}
-              <motion.div className="sm:col-span-6 lg:col-span-3" variants={staggerItemVariants}>
-                <h4 className="text-h5 font-semibold mb-6 text-primary">Contact Info</h4>
-                <ul className="space-y-4">
+              <motion.div className="sm:col-span-6 lg:col-span-3 text-left" variants={staggerItemVariants}>
+                <h4 className="text-h5 font-semibold mb-6 text-primary text-left">Contact Info</h4>
+                <ul className="space-y-4 text-left">
                   <motion.li
-                    className="text-text-light"
+                    className="text-text-light text-left block"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0 }}
@@ -151,7 +153,7 @@ const Footer: React.FC = () => {
                     <strong>Email:</strong> info@vortexcubes.com
                   </motion.li>
                   <motion.li
-                    className="text-text-light"
+                    className="text-text-light text-left block"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.05 }}
@@ -160,13 +162,13 @@ const Footer: React.FC = () => {
                     <strong>Phone:</strong> +91 7049820057
                   </motion.li>
                   <motion.li
-                    className="text-text-light text-sm"
+                    className="text-text-light text-sm text-left block"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <strong>Address:</strong>206, Shagun Arcade,Vijay nagar, Indore - (M.P.) 452010
+                    <strong>Address:</strong> 206, Shagun Arcade, Vijay nagar, Indore - (M.P.) 452010
                   </motion.li>
                 </ul>
               </motion.div>
@@ -181,22 +183,22 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-left w-full">
               <p className="text-text-light text-sm mb-4 sm:mb-0">
                 © 2025 Vortex Cubes. All rights reserved.
               </p>
               <div className="flex gap-6">
                 <motion.a
-                  href="/privacy"
+                  href="/privacy-policy"
                   className="text-text-light text-sm transition-colors"
-                  whileHover={{ color: '#3B82F6' }}
+                  whileHover={{ color: '#fb923c' }}
                 >
                   Privacy Policy
                 </motion.a>
                 <motion.a
-                  href="/terms"
+                  href="/terms-and-condition"
                   className="text-text-light text-sm transition-colors"
-                  whileHover={{ color: '#3B82F6' }}
+                  whileHover={{ color: '#fb923c' }}
                 >
                   Terms of Service
                 </motion.a>

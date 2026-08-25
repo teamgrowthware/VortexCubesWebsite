@@ -2,6 +2,10 @@ import type { AdminAuthResponse, BenchResource, BenchResourcePayload } from '../
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
+if (!import.meta.env.VITE_API_BASE_URL && import.meta.env.PROD) {
+  console.warn('VITE_API_BASE_URL is not configured; Bench Resources will use localhost.');
+}
+
 type RequestOptions = RequestInit & {
   token?: string | null;
 };
@@ -37,10 +41,11 @@ export function loginAdmin(payload: { email: string; password: string }) {
   });
 }
 
-export function signupAdmin(payload: { name: string; email: string; password: string }) {
+export function signupAdmin(payload: { name: string; email: string; password: string }, signupKey: string) {
   return apiRequest<AdminAuthResponse>('/auth/signup', {
     method: 'POST',
     body: JSON.stringify(payload),
+    headers: { 'x-admin-signup-key': signupKey },
   });
 }
 
